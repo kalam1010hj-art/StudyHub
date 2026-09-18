@@ -13,7 +13,7 @@ function Home(){
     useEffect(()=>{
         console.log("home mounted")
         return ()=> console.log("home unmounted")
-    })
+    },[])
     return (
         <div>
        <Hero/>
