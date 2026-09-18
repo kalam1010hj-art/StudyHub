@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 
 from pathlib import Path
 from dotenv import load_dotenv
+
 import os
 
 load_dotenv()
@@ -34,14 +35,22 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+
+    # Apps
     'academics',
     'accounts',
     'config',
     'interactions',
     'resources',
+
+    # DRF
     'rest_framework',
+     "rest_framework.authtoken",
+
+    #  cloudniary
     "cloudinary",
     "cloudinary_storage",
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -143,7 +152,7 @@ MAILERS = {
     },
 }
 
-import os
+
 
 CLOUDINARY_STORAGE = {
     "CLOUD_NAME": os.getenv("CLOUDINARY_CLOUD_NAME"),
@@ -157,4 +166,13 @@ STORAGES = {
     "staticfiles": {
         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
+}
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+    ],
+
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.AllowAny",
+    ],
 }
