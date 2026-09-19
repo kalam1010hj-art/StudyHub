@@ -1,0 +1,180 @@
+
+.loadingContainer {
+  min-height: 50vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  padding: 60px 20px;
+  box-sizing: border-box;
+}
+
+/* Main loader */
+.loader {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Orbit rings */
+.orbit {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 2px solid transparent;
+  border-top-color: #6366f1;
+  border-right-color: #6366f1;
+  border-radius: 50%;
+  animation: rotate 1.8s linear infinite;
+}
+
+.orbit:nth-child(2) {
+  width: 78%;
+  height: 78%;
+  border-top-color: #8b5cf6;
+  border-right-color: transparent;
+  animation-duration: 1.3s;
+  animation-direction: reverse;
+}
+
+.orbit:nth-child(3) {
+  width: 56%;
+  height: 56%;
+  border-top-color: #a78bfa;
+  border-right-color: #a78bfa;
+  animation-duration: 1s;
+}
+
+/* Center logo */
+.center {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: linear-gradient(
+    135deg,
+    #6366f1,
+    #8b5cf6
+  );
+
+  box-shadow:
+    0 8px 25px rgba(99, 102, 241, 0.3);
+
+  animation: pulse 1.8s ease-in-out infinite;
+}
+
+.center span {
+  color: white;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+/* Text */
+.content {
+  text-align: center;
+  max-width: 360px;
+}
+
+.content h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #18181b;
+}
+
+.content p {
+  margin: 8px 0 20px;
+  color: #71717a;
+  font-size: 14px;
+}
+
+/* Progress */
+.progress {
+  width: 220px;
+  height: 4px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #e4e4e7;
+}
+
+.progressBar {
+  width: 45%;
+  height: 100%;
+  border-radius: inherit;
+
+  background: linear-gradient(
+    90deg,
+    #6366f1,
+    #8b5cf6
+  );
+
+  animation: loading 1.5s ease-in-out infinite;
+}
+
+/* Animations */
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes loading {
+  0% {
+    transform: translateX(-120%);
+  }
+
+  100% {
+    transform: translateX(350%);
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .loadingContainer {
+    min-height: 45vh;
+    padding: 40px 16px;
+  }
+
+  .loader {
+    width: 90px;
+    height: 90px;
+  }
+
+  .content h2 {
+    font-size: 19px;
+  }
+
+  .content p {
+    font-size: 13px;
+  }
+
+  .progress {
+    width: 180px;
+  }
+}
+

@@ -58,6 +58,17 @@ class CollegeView(APIView):
      permission_classes = [IsAdminForWrite]
      def get(self,request):
         colleges = College.objects.all()
+        university_id = request.query_params.get("university")
+        if university_id:
+            try:
+                colleges = College.objects.filter(university_id = university_id)
+                university = University.objects.get(id=university_id)
+                collegeSerializer = CollegeSerializer(colleges,many = True)
+                universitySerializer = UniversitySerailizer(university)
+                return Response({"colleges":collegeSerializer.data,"university":universitySerializer.data})
+            except University.DoesNotExist:
+                return Response({"error":"No university present"},status=404)
+
         serializer = CollegeSerializer(colleges,many = True)
         return Response(serializer.data)
      def post(self,request):
@@ -103,6 +114,20 @@ class DegreeView(APIView):
     def get(self, request):
         degrees = Degree.objects.all()
         serializer = DegreeSerializer(degrees, many=True)
+        collegeId = request.query_params.get("collegeId")
+        if collegeId:
+            try:
+                college = College.objects.get(id = collegeId)
+                degrees = college.degree.all()
+                degreeSerializer = DegreeSerializer(degrees,many = True)
+                collegeSerializer = CollegeSerializer(college)
+                return Response({
+                    "college":collegeSerializer.data,
+                    "degrees":degreeSerializer.data
+                    })
+            except College.DoesNotExist:
+                return Response({"error":"No college exits"},status=404)
+            
         return Response(serializer.data)
 
     def post(self, request):
@@ -165,8 +190,23 @@ class BranchView(APIView):
     permission_classes = [IsAdminForWrite]
 
     def get(self, request):
+        degreeId = request.query_params.get("degreeId")
         branches = Branch.objects.all()
         serializer = BranchSerializer(branches, many=True)
+        if degreeId:
+            try:
+                degree = Degree.objects.get(id=degreeId)
+                branches = degree.branches.all()
+                degreeSerializer = DegreeSerializer(degree)
+                branchSerializer = BranchSerializer(branches,many = True)
+                return Response({
+                    "branches":branchSerializer.data,
+                    "degree":degreeSerializer.data
+                    })
+            except Degree.DoesNotExist:
+                return Response({"error":"Not found"},status=404)
+
+        
         return Response(serializer.data)
 
     def post(self, request):
@@ -230,8 +270,20 @@ class SubjectView(APIView):
     permission_classes = [IsAdminForWrite]
 
     def get(self, request):
+        semesterId = request.query_params.get("semesterId")
         subjects = Subject.objects.all()
         serializer = SubjectSerializer(subjects, many=True)
+        if semesterId:
+            try:
+                semester = Semester.objects.get(id = semesterId)
+                subjects = Subject.objects.filter(semester_id = semesterId)
+                semesterSerializer = SemesterSerializer(semester)
+                subjectsSerializer = SubjectSerializer(subjects,many = True)
+                semester = semesterSerializer.data
+                return Response({"semester":semester,"subject":subjectsSerializer.data})
+            except Semester.DoesNotExist:
+                return Response({"error":"Got an erorr"},status=404)
+
         return Response(serializer.data)
 
     def post(self, request):
@@ -295,8 +347,18 @@ class SemesterView(APIView):
     permission_classes = [IsAdminForWrite]
 
     def get(self, request):
+        branchId = request.query_params.get("branchId")
         semesters = Semester.objects.all()
         serializer = SemesterSerializer(semesters, many=True)
+        if branchId:
+            try:
+                branch = Branch.objects.get(id = branchId)
+                semesters = Semester.objects.filter(branch_id = branchId)
+                branchSerializer = BranchSerializer(branch)
+                semSerializer = SemesterSerializer(semesters,many = True)
+                return Response({"branch":branchSerializer.data,"semesters":semSerializer.data})
+            except Branch.DoesNotExist:
+                return Response({"error":"No Branch found with that branchID"},status=404)
         return Response(serializer.data)
 
     def post(self, request):
@@ -362,6 +424,21 @@ class ResourceView(APIView):
     permission_classes = [IsAdminForWrite]
 
     def get(self, request):
+        subjectId = request.query_params.get("subjectId")
+        if subjectId:
+            print("Excecuted")
+            try:
+                subject = Subject.objects.get(id = subjectId)
+                resources = Resource.objects.filter(subject_id = subjectId)
+                subjectSerializer  = SubjectSerializer(subject)
+                resourceSerializer = ResourceSerializer(resources,many = True)
+                return Response({
+                                "subject":subjectSerializer.data,
+                                "resources":resourceSerializer.data
+                                })
+            except Subject.DoesNotExist:
+                return Response({"erorr":" subject not present"},status=404)
+
         resources = Resource.objects.all()
         serializer = ResourceSerializer(resources, many=True)
         return Response(serializer.data)

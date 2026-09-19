@@ -9,6 +9,15 @@ class University(models.Model):
     def __str__(self):
         return self.name
 
+
+    def __str__(self):
+        return self.name
+class Degree(models.Model):
+    name = models.CharField(max_length=200)
+    code = models.CharField(max_length=20, unique=True)
+    def __str__(self):
+            return self.name
+
 class College(models.Model):
     university = models.ForeignKey(
         University,
@@ -17,21 +26,16 @@ class College(models.Model):
     )
     name = models.CharField(max_length=200)
     code = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.name
-class Degree(models.Model):
-    name = models.CharField(max_length=200)
-    code = models.CharField(max_length=20, unique=True)
-        
+    degree = models.ManyToManyField(Degree,
+    related_name="colleges")       
 
     def __str__(self):
         return self.name
 class Branch(models.Model):
     name = models.CharField(max_length=200)
     code = models.CharField(max_length=20, unique=True)
-    degree = models.ForeignKey(Degree,
-                               on_delete=models.CASCADE,
+    degree = models.ManyToManyField(Degree,
+                              
                                related_name="branches")
     def __str__(self):
         return f'{self.name} code {self.code}'
