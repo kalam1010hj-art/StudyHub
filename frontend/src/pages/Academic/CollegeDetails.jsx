@@ -2,7 +2,6 @@ import { Building2, MapPin, Link2 } from "lucide-react";
 import Breadcrumbs from "../../components/Academic/Breadcrumbs/Breadcrumbs";
 import AcademicPath from "../../components/Academic/AcademicPath/AcademicPath";
 import ProgramCard from "../../components/Academic/ProgramCard/ProgramCard";
-import { programs } from "../../data/academicDirectoryData";
 import styles from "./CollegeDetails.module.css";
 import { useEffect, useState } from "react";
 import { getPrograms } from "../../services/collegeServices";
@@ -45,7 +44,7 @@ export default function CollegeDetails() {
      return ()=>{
       console.log("college details unmounted")
     }
-  },[])
+  },[collegeId])
   return (
     <main className={styles.page}>
       <div className={styles.container}>
