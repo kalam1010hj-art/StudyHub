@@ -600,3 +600,21 @@
     max-width: 100%;
   }
 }
+
+
+/* Final mobile pass */
+@media (max-width: 640px) {
+  .page, .container {
+    max-width: 100%;
+    min-width: 0;
+  }
+  .page, .container {
+    overflow-x: clip;
+  }
+  h1, h2, h3, p, a, button {
+    overflow-wrap: anywhere;
+  }
+  img, svg, video, canvas {
+    max-width: 100%;
+  }
+}
