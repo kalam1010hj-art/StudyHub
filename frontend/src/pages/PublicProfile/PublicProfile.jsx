@@ -4,6 +4,7 @@ import {
   BookOpen,
   Building2,
   CalendarDays,
+  FileText,
   GraduationCap,
   Globe,
   Star
@@ -13,6 +14,7 @@ import { useState } from "react";
 import { getPublicProfile } from "../../services/UserServices";
 import { useParams } from "react-router-dom";
 import Loading from "../../components/Loading/Loading";
+import ResourceCard from "../../components/Academic/ResourceCard/ResourceCard";
 
 // Accessible inline SVG fallbacks for brand icons to prevent lucide-react version conflicts
 const GithubIcon = ({ className }) => (
@@ -54,28 +56,6 @@ const LinkedinIcon = ({ className }) => (
 
 
 
-// Mock Contribution Data
-const contributions = [
-  {
-    id: 1,
-    title: "Data Structures Unit 1 Notes",
-    type: "Notes",
-    subject: "Data Structures"
-  },
-  {
-    id: 2,
-    title: "DBMS Previous Year Questions",
-    type: "Question Paper",
-    subject: "Database Management Systems"
-  },
-  {
-    id: 3,
-    title: "React Development Notes",
-    type: "Notes",
-    subject: "Web Development"
-  }
-];
-
 // Helper to compute fallback initials dynamically
 const getInitials = (firstName = "", lastName = "") => {
   const first = firstName.trim().charAt(0);
@@ -109,6 +89,7 @@ export default function PublicProfile() {
   const formattedReputation = user.reputation_points
     ? user.reputation_points.toLocaleString()
     : "0";
+  const uploadedResources = Array.isArray(user.resources) ? user.resources : [];
  
   console.log("public profile rendered")
   useEffect(()=>{
@@ -306,31 +287,42 @@ export default function PublicProfile() {
           </section>
         </div>
 
-        {/* Section 5: Contribution Preview */}
+        {/* Section 5: Uploaded Resources */}
         <section
           className={styles.card}
-          aria-labelledby="contributions-heading"
+          aria-labelledby="uploads-heading"
         >
           <div className={styles.sectionHeader}>
-            <h2 id="contributions-heading" className={styles.cardHeading}>
-              Recent Contributions
-            </h2>
+            <div>
+              <h2 id="uploads-heading" className={styles.cardHeading}>
+                Uploaded Resources
+              </h2>
+              <p className={styles.sectionSubtitle}>
+                Academic resources shared by {fullName || "this contributor"}.
+              </p>
+            </div>
+
             <span className={styles.countBadge}>
-              {contributions.length} shared
+              {uploadedResources.length}{" "}
+              {uploadedResources.length === 1 ? "resource" : "resources"}
             </span>
           </div>
 
-          <div className={styles.contributionsGrid}>
-            {contributions.map((item) => (
-              <article key={item.id} className={styles.contributionCard}>
-                <div className={styles.contributionMeta}>
-                  <span className={styles.typeBadge}>{item.type}</span>
-                  <span className={styles.subjectText}>{item.subject}</span>
-                </div>
-                <h3 className={styles.contributionTitle}>{item.title}</h3>
-              </article>
-            ))}
-          </div>
+          {uploadedResources.length > 0 ? (
+            <div className={styles.resourceGrid}>
+              {uploadedResources.map((resource) => (
+                <ResourceCard key={resource.id} resource={resource} />
+              ))}
+            </div>
+          ) : (
+            <div className={styles.emptyUploads}>
+              <div className={styles.emptyUploadsIcon} aria-hidden="true">
+                <FileText size={24} />
+              </div>
+              <h3>No uploads yet</h3>
+              <p>This user hasn't uploaded any study resources yet.</p>
+            </div>
+          )}
         </section>
       </main>
     </div>
