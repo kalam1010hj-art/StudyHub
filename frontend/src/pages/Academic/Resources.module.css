@@ -504,3 +504,40 @@
     display: none;
   }
 }
+
+/* Global mobile safety for this page */
+@media (max-width: 640px) {
+  .page,
+  .container {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .page {
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3,
+  p,
+  a,
+  button,
+  label {
+    overflow-wrap: anywhere;
+  }
+
+  img,
+  svg,
+  video,
+  canvas {
+    max-width: 100%;
+  }
+
+  input,
+  select,
+  textarea,
+  button {
+    max-width: 100%;
+  }
+}
