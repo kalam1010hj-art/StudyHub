@@ -5,16 +5,33 @@ from .models import User
 from academics.serializers import MyResourceSerializer
 
 class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField(max_length = 200)
-    password = serializers.CharField(max_length = 200)
+    identifier = serializers.CharField(max_length=254)
+    password = serializers.CharField(max_length=200)
 
 class RegisterSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(required=True, allow_blank=False)
+
     class Meta:
         model = User
-        fields = ["first_name","last_name","email","username","id","password"]
+        fields = ["first_name", "last_name", "email", "username", "id", "password"]
         extra_kwargs = {
-            "password": {"write_only": True}
+            "password": {"write_only": True},
+            "first_name": {"required": True, "allow_blank": False},
+            "last_name": {"required": True, "allow_blank": False},
+            "username": {"required": True, "allow_blank": False},
         }
+
+    def validate_username(self, value):
+        value = value.strip()
+        if User.objects.filter(username__iexact=value).exists():
+            raise serializers.ValidationError("That username is already taken.")
+        return value
+
+    def validate_email(self, value):
+        value = value.strip().lower()
+        if User.objects.filter(email__iexact=value).exists():
+            raise serializers.ValidationError("An account with this email already exists.")
+        return value
 
     def validate_password(self, value):
         validate_password(value)
