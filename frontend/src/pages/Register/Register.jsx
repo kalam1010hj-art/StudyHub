@@ -18,10 +18,13 @@ const Register = () => {
 
   // Form State
   const [formData, setFormData] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
     username: "",
     password: "",
     confirmPassword: "",
-   
+    agreeToTerms: false,
   });
 
   // UI States
@@ -43,11 +46,22 @@ const Register = () => {
     e.preventDefault();
     setError("");
 
+    const first_name = formData.first_name.trim();
+    const last_name = formData.last_name.trim();
+    const email = formData.email.trim().toLowerCase();
     const username = formData.username.trim();
 
-    if (!username) {
-      setError("Please enter a username.");
-      return;
+    if (!first_name) return setError("Please enter your first name.");
+    if (!last_name) return setError("Please enter your last name.");
+    if (!email) return setError("Please enter your email address.");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return setError("Please enter a valid email address.");
+    }
+    if (!username) return setError("Please choose a username.");
+    if (username.length < 3) return setError("Username must be at least 3 characters.");
+    if (!formData.password) return setError("Please create a password.");
+    if (formData.password.length < 8) {
+      return setError("Password must be at least 8 characters long.");
     }
 
     if (formData.password !== formData.confirmPassword) {
@@ -55,23 +69,29 @@ const Register = () => {
       return;
     }
 
-    if (formData.password.length < 6) {
-      setError("Password must be at least 6 characters long.");
-      return;
+    if (!formData.agreeToTerms) {
+      return setError("Please agree to the Terms of Service and Privacy Policy.");
     }
 
     setLoading(true);
 
     try {
       await CreateAccount({
+        first_name,
+        last_name,
+        email,
         username,
         password: formData.password,
       });
 
       setFormData({
+        first_name: "",
+        last_name: "",
+        email: "",
         username: "",
         password: "",
         confirmPassword: "",
+        agreeToTerms: false,
       });
 
       navigate("/login", {
@@ -128,10 +148,31 @@ const Register = () => {
         {/* Registration Form */}
         <form onSubmit={handleSubmit} className={styles.form}>
           
-          {/* Full Name / Username */}
+          <div className={styles.nameGrid}>
+            <div className={styles.inputGroup}>
+              <label htmlFor="first_name" className={styles.label}>First name</label>
+              <div className={styles.inputWrapper}>
+                <User size={18} className={styles.inputIcon} />
+                <input id="first_name" type="text" name="first_name" value={formData.first_name}
+                  onChange={handleChange} placeholder="John" className={styles.input}
+                  autoComplete="given-name" maxLength={150} required />
+              </div>
+            </div>
+            <div className={styles.inputGroup}>
+              <label htmlFor="last_name" className={styles.label}>Last name</label>
+              <div className={styles.inputWrapper}>
+                <User size={18} className={styles.inputIcon} />
+                <input id="last_name" type="text" name="last_name" value={formData.last_name}
+                  onChange={handleChange} placeholder="Doe" className={styles.input}
+                  autoComplete="family-name" maxLength={150} required />
+              </div>
+            </div>
+          </div>
+
+          {/* Username */}
           <div className={styles.inputGroup}>
             <label htmlFor="username" className={styles.label}>
-           Username
+              Username
             </label>
             <div className={styles.inputWrapper}>
               <User size={18} className={styles.inputIcon} />
@@ -141,7 +182,7 @@ const Register = () => {
                 name="username"
                 value={formData.username}
                 onChange={handleChange}
-                placeholder="John Doe"
+                placeholder="john_doe"
                 className={styles.input}
                 required
               />
@@ -149,24 +190,18 @@ const Register = () => {
           </div>
 
           {/* Email */}
-          {/* <div className={styles.inputGroup}>
-            <label htmlFor="email" className={styles.label}>
-              Email Address
-            </label>
+          <div className={styles.inputGroup}>
+            <label htmlFor="email" className={styles.label}>Email address</label>
             <div className={styles.inputWrapper}>
               <Mail size={18} className={styles.inputIcon} />
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="name@example.com"
-                className={styles.input}
-                required
-              />
+              <input type="email" id="email" name="email" value={formData.email}
+                onChange={handleChange} placeholder="you@example.com" className={styles.input}
+                autoComplete="email" inputMode="email" maxLength={254} required />
             </div>
-          </div> */}
+            <span className={styles.helpText}>
+              Used for password recovery and important StudyHub account emails.
+            </span>
+          </div>
 
           {/* Password */}
           <div className={styles.inputGroup}>
@@ -224,21 +259,14 @@ const Register = () => {
             </div>
           </div>
 
-          {/* Terms & Conditions Checkbox */}
-          {/* <div className={styles.checkboxGroup}>
-            <label className={styles.checkboxLabel}>
-              <input
-                type="checkbox"
-                name="agreeToTerms"
-                checked={formData.agreeToTerms}
-                onChange={handleChange}
-                className={styles.checkbox}
-              />
-              <span>
-                I agree to the <Link to="/terms" className={styles.inlineLink}>Terms of Service</Link> and <Link to="/privacy" className={styles.inlineLink}>Privacy Policy</Link>
-              </span>
-            </label>
-          </div> */}
+          <label className={styles.checkboxLabel}>
+            <input type="checkbox" name="agreeToTerms" checked={formData.agreeToTerms}
+              onChange={handleChange} className={styles.checkbox} />
+            <span>
+              I agree to the <Link to="/terms" className={styles.inlineLink}>Terms of Service</Link>{" "}
+              and <Link to="/privacy" className={styles.inlineLink}>Privacy Policy</Link>.
+            </span>
+          </label>
 
           {/* Submit Button */}
           <button type="submit" className={styles.submitBtn} disabled={loading}>
