@@ -1,0 +1,6 @@
+Allow search engines to crawl the public StudyHub site.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://study-hub-gold-delta.vercel.app/sitemap.xml
