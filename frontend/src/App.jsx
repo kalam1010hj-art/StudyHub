@@ -3,6 +3,7 @@ import { Route,Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Footer from "./components/Footer/Footer";
 import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import Universities from "./pages/Academic/Universities";
 import UniversityDetails from "./pages/Academic/UniversityDetails";
 import ProgramDetails from "./pages/Academic/ProgramDetails";
@@ -31,11 +32,74 @@ import Terms from "./pages/Terms/Terms";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 function App(){
-  console.log("App component rendered")
-  useEffect(()=>{
-    console.log("App component mounted")
-    return ()=>console.log("App component Unmounted")
-  },[])
+  const location = useLocation();
+
+  useEffect(() => {
+    const path = location.pathname;
+    const seo = path === "/"
+      ? {
+          title: "StudyHub — Academic Resources for Students",
+          description: "Discover academic notes, question papers, study materials, and resources organized by university, college, degree, branch, semester, and subject.",
+        }
+      : path === "/universities"
+      ? {
+          title: "Universities — StudyHub",
+          description: "Explore universities and discover colleges and academic resources available on StudyHub.",
+        }
+      : path === "/colleges"
+      ? {
+          title: "Colleges — StudyHub",
+          description: "Explore colleges, programs, branches, semesters, and study resources on StudyHub.",
+        }
+      : path === "/resourceHub"
+      ? {
+          title: "Resource Hub — StudyHub",
+          description: "Find study materials, notes, question papers, and academic resources on StudyHub.",
+        }
+      : path === "/about"
+      ? {
+          title: "About StudyHub",
+          description: "Learn about StudyHub and its mission to make academic resources easier for students to discover.",
+        }
+      : path === "/contact"
+      ? {
+          title: "Contact StudyHub",
+          description: "Contact StudyHub for questions, feedback, or requests to add academic institutions.",
+        }
+      : path === "/privacy"
+      ? {
+          title: "Privacy Policy — StudyHub",
+          description: "Read the StudyHub privacy policy and learn how user information is handled.",
+        }
+      : path === "/terms"
+      ? {
+          title: "Terms of Service — StudyHub",
+          description: "Read the StudyHub terms of service for using the academic resource platform.",
+        }
+      : {
+          title: "StudyHub — Academic Resources",
+          description: "StudyHub is an academic resource platform for students.",
+        };
+
+    document.title = seo.title;
+
+    let description = document.querySelector('meta[name="description"]');
+    if (!description) {
+      description = document.createElement("meta");
+      description.name = "description";
+      document.head.appendChild(description);
+    }
+    description.setAttribute("content", seo.description);
+
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement("link");
+      canonical.rel = "canonical";
+      document.head.appendChild(canonical);
+    }
+    canonical.href = `https://study-hub-gold-delta.vercel.app${path === "/" ? "/" : path}`;
+  }, [location.pathname]);
+
   return (
     <>
       <Navbar/>
