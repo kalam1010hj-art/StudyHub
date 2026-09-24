@@ -214,10 +214,12 @@ export default function Profile() {
                 <span>Edit Profile</span>
               </button>
               </Link>
-              <button className={styles.secondaryButton} type="button" aria-label="Settings">
-                <Settings size={15} />
-                <span>Settings</span>
-              </button>
+              <Link to="/settings">
+                <button className={styles.secondaryButton} type="button" aria-label="Settings">
+                  <Settings size={15} />
+                  <span>Settings</span>
+                </button>
+              </Link>
             </div>
           </div>
         </section>
