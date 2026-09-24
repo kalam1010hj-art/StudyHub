@@ -10,14 +10,19 @@ export default function UniversityCard({ university }) {
           <Building2 size={22} />
         </div> */}
          {university.logo ? (
-            <img
-              src={university.logo}
-              alt={`${university.name} logo`}
-            />
+            <div className={styles.logo}>
+              <img
+                src={university.logo}
+                alt={`${university.name} logo`}
+                onError={(event) => {
+                  event.currentTarget.style.display = "none";
+                }}
+              />
+            </div>
           ) : (
-            <span>
-              {university.code?.charAt(0)}
-            </span>
+            <div className={styles.logo}>
+              <span>{university.code?.charAt(0)}</span>
+            </div>
           )}
         <span className={styles.code}>{university.code}</span>
       </div>
