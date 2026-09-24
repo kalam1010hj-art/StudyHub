@@ -17,5 +17,5 @@ urlpatterns = [
     path("publicProfile",PublicProfileView.as_view()),
     path("change-password", ChangePasswordView.as_view()),
     path("delete-account", DeleteAccountView.as_view()),
-    path("logout", LogoutView.as_view())
+    path("logout", LogoutView.as_view()),\n    path("forgot-password", ForgotPasswordView.as_view()),\n    path("reset-password", ResetPasswordView.as_view())
 ]
