@@ -33,13 +33,10 @@ const SubjectCard = ({ subject}) => {
           </p>
         )} */}
 
-        <button
-          className={styles.button}
-        //   onClick={() => onClick?.(subject)}
-        >
+        <span className={styles.button}>
           View Resources
           <ArrowRight size={17} />
-        </button>
+        </span>
       </div>
     </article>
     </Link>
