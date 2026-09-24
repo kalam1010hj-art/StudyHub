@@ -2,6 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 from .serializers import LoginSerializer,RegisterSerializer
 from .models import User
 from .serializers import UserInfoSerializer,PublicProfileSerializer
@@ -95,9 +97,11 @@ class ChangePasswordView(APIView):
                 status=400,
             )
 
-        if len(new_password) < 8:
+        try:
+            validate_password(new_password, user=request.user)
+        except ValidationError as exc:
             return Response(
-                {"detail": "New password must be at least 8 characters long."},
+                {"detail": " ".join(exc.messages)},
                 status=400,
             )
 
