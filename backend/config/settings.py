@@ -33,7 +33,7 @@ DEBUG = os.environ.get("DEBUG")
 ALLOWED_HOSTS = [
       "localhost",
     "127.0.0.1",
-    "https://studyhub-6f6s.onrender.com"
+    "studyhub-6f6s.onrender.com"
 ]
 
 
@@ -79,7 +79,7 @@ ROOT_URLCONF = 'config.urls'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    "https://study-hub-gold-delta.vercel.app/"
+    "https://study-hub-gold-delta.vercel.app"
 ]
 TEMPLATES = [
     {
