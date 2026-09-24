@@ -11,13 +11,13 @@ urlpatterns = [
     path('degree/<int:pk>',DegreeDetailsView.as_view()),
 
     path('branch',BranchView.as_view()),
-    path('branch/<int:id>',BranchDetailsView.as_view()),
+    path('branch/<int:pk>',BranchDetailsView.as_view()),
 
     path('sem',SemesterView.as_view()),
-    path("sem/<int:id>",SemesterDetailsView.as_view()),
+    path("sem/<int:pk>",SemesterDetailsView.as_view()),
 
     path('subject',SubjectView.as_view()),
-    path('subject/<int:id>',SubjectDetailsView.as_view()),
+    path('subject/<int:pk>',SubjectDetailsView.as_view()),
 
     path('resource',ResourceView.as_view()),
     path('resource/<int:pk>',ResourceDetailsView.as_view()),
