@@ -4,13 +4,13 @@ from .models import  University,College,Degree,Branch,Subject,Semester,Resource,
 from .serializers import UniversitySerailizer,CollegeSerializer,DegreeSerializer,BranchSerializer,SubjectSerializer,SemesterSerializer,ResourceSerializer,MyResourceSerializer,CollegeProgramSerializer
 from rest_framework.permissions import IsAdminUser,IsAuthenticated,IsAuthenticatedOrReadOnly,AllowAny
 from django.db.models import ProtectedError
-from .permissions import IsAdminForWrite,IsAuthenticatedForWrite
+from .permissions import IsAdminForWrite,IsSuperuserForWrite,IsAuthenticatedForWrite
 # Create your views here.
 
 # Universtiy view created for get and post of univesity's
 
 class UniversityView(APIView):
-    permission_classes = [IsAdminForWrite]
+    permission_classes = [IsSuperuserForWrite]
     def get(self,request):
         universitys = University.objects.all()
         serializer  = UniversitySerailizer(universitys,many = True)
@@ -26,7 +26,7 @@ class UniversityView(APIView):
         return Response(serializer.errors,status=400)
 
 class UnviersityDetailsView(APIView):
-    permission_classes = [IsAdminForWrite]
+    permission_classes = [IsSuperuserForWrite]
     def get(self,request,pk):
          try:
             university = University.objects.get(id = pk)
@@ -56,7 +56,7 @@ class UnviersityDetailsView(APIView):
             
 
 class CollegeView(APIView):
-     permission_classes = [IsAdminForWrite]
+     permission_classes = [IsSuperuserForWrite]
      def get(self,request):
         colleges = College.objects.all()
         university_id = request.query_params.get("university")
@@ -80,7 +80,7 @@ class CollegeView(APIView):
           return Response(serializer.errors,status=400)
 
 class CollegeDetailsView(APIView):
-        permission_classes = [IsAdminForWrite]
+        permission_classes = [IsSuperuserForWrite]
         def get(self,request,pk):
             try:
                 college  = College.objects.get(id = pk)
@@ -110,7 +110,7 @@ class CollegeDetailsView(APIView):
                   
         
 class DegreeView(APIView):
-    permission_classes = [IsAdminForWrite]
+    permission_classes = [IsSuperuserForWrite]
 
     def get(self, request):
         degrees = Degree.objects.all()
@@ -142,7 +142,7 @@ class DegreeView(APIView):
 
 
 class DegreeDetailsView(APIView):
-    permission_classes = [IsAdminForWrite]
+    permission_classes = [IsSuperuserForWrite]
 
     def get(self, request, pk):
         try:
@@ -534,7 +534,7 @@ class ResourceDetailsView(APIView):
 
 
 class CollegeProgramView(APIView):
-    permission_classes = [IsAdminForWrite]
+    permission_classes = [IsSuperuserForWrite]
     def get(self, request):
         programs = CollegeProgram.objects.all()
         serializer = CollegeProgramSerializer(programs, many=True)
@@ -551,7 +551,7 @@ class CollegeProgramView(APIView):
 
 
 class CollegeProgramDetailsView(APIView):
-    permission_classes = [IsAdminForWrite]
+    permission_classes = [IsSuperuserForWrite]
     def get(self, request, pk):
         try:
             program = CollegeProgram.objects.get(id=pk)
