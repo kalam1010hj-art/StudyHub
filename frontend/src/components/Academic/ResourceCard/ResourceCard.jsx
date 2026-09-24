@@ -15,16 +15,20 @@ const ResourceCard = ({ resource }) => {
 
   const resourceType = isQuestionPaper
     ? "Question Paper"
-    : resource.resource_type?.replace("_", " ");
+    : resource.resource_type?.replaceAll("_", " ") || "Resource";
 
   const handleView = () => {
+    if (!resource.file) return;
     window.open(resource.file, "_blank", "noopener,noreferrer");
   };
 
   const handleDownload = () => {
+    if (!resource.file) return;
+
     const link = document.createElement("a");
     link.href = resource.file;
-    link.download = resource.title;
+    link.download = resource.title || "studyhub-resource";
+    link.rel = "noopener";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -39,7 +43,6 @@ const ResourceCard = ({ resource }) => {
 
   return (
     <article className={styles.card}>
-      {/* Top Bar: Badges & Bookmark */}
       <div className={styles.header}>
         <div className={styles.badges}>
           <span className={`${styles.badge} ${styles.typeBadge}`}>
@@ -56,13 +59,16 @@ const ResourceCard = ({ resource }) => {
 
         <div className={styles.quickActions}>
           <button
+            type="button"
             className={styles.iconButton}
             title="Bookmark resource"
             aria-label="Bookmark"
           >
             <Bookmark size={16} />
           </button>
+
           <button
+            type="button"
             className={styles.iconButton}
             title="More options"
             aria-label="More"
@@ -72,7 +78,6 @@ const ResourceCard = ({ resource }) => {
         </div>
       </div>
 
-      {/* Main Content */}
       <div className={styles.body}>
         <h3 className={styles.title} onClick={handleView}>
           {resource.title}
@@ -83,13 +88,15 @@ const ResourceCard = ({ resource }) => {
         )}
       </div>
 
-      {/* Subject Metadata Pills */}
       {resource.subject && (
         <div className={styles.subjectMeta}>
-          <span className={styles.metaChip}>
-            <BookOpen size={12} />
-            {resource.subject.name}
-          </span>
+          {resource.subject.name && (
+            <span className={styles.metaChip}>
+              <BookOpen size={12} />
+              {resource.subject.name}
+            </span>
+          )}
+
           {resource.subject.semester && (
             <span className={styles.metaChip}>
               Sem {resource.subject.semester}
@@ -98,43 +105,55 @@ const ResourceCard = ({ resource }) => {
         </div>
       )}
 
-      {/* Footer: Uploader & Primary Actions */}
-      
       <div className={styles.footer}>
         {uploader?.id ? (
-          <Link to={`/publicProfile/${uploader.id}`}>
+          <Link to={`/publicProfile/${uploader.id}`} aria-label={`View ${uploaderName}'s profile`}>
             <div className={styles.uploader}>
-          {uploader?.avatar ? (
-            <img
-              src={uploader.avatar}
-              alt={uploaderName}
-              className={styles.avatar}
-            />
-          ) : (
-            <div className={styles.avatarFallback}>
-              {uploaderName.charAt(0).toUpperCase()}
-            </div>
-          )}
-          <div className={styles.uploaderDetails}>
-            <span className={styles.uploaderName}>{uploaderName}</span>
-            <span className={styles.uploaderRole}>Contributor</span>
+              {uploader.avatar ? (
+                <img
+                  src={uploader.avatar}
+                  alt={uploaderName}
+                  className={styles.avatar}
+                />
+              ) : (
+                <div className={styles.avatarFallback}>
+                  {uploaderName.charAt(0).toUpperCase()}
+                </div>
+              )}
+
+              <div className={styles.uploaderDetails}>
+                <span className={styles.uploaderName}>{uploaderName}</span>
+                <span className={styles.uploaderRole}>Contributor</span>
+              </div>
             </div>
           </Link>
         ) : (
           <div className={styles.uploader}>
+            <div className={styles.avatarFallback}>?</div>
+            <div className={styles.uploaderDetails}>
+              <span className={styles.uploaderName}>Unknown contributor</span>
+              <span className={styles.uploaderRole}>Contributor</span>
+            </div>
+          </div>
+        )}
 
         <div className={styles.actionButtons}>
           <button
+            type="button"
             className={styles.secondaryButton}
             onClick={handleDownload}
             title="Download file"
+            disabled={!resource.file}
           >
             <Download size={15} />
           </button>
+
           <button
+            type="button"
             className={styles.primaryButton}
             onClick={handleView}
             title="View resource"
+            disabled={!resource.file}
           >
             <Eye size={15} />
             <span>View</span>
