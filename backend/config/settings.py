@@ -111,11 +111,39 @@ WSGI_APPLICATION = "config.wsgi.application"
 # CORS
 # =========================================================
 
+# Browser origins allowed to call the Django API.
+# Keep the production Vercel origin exact (no trailing slash).
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "https://study-hub-gold-delta.vercel.app",
 ]
+
+# Allow Render deployments to override/add origins without changing code.
+_extra_cors_origins = os.getenv("CORS_ALLOWED_ORIGINS", "")
+if _extra_cors_origins:
+    CORS_ALLOWED_ORIGINS = list(
+        dict.fromkeys(
+            CORS_ALLOWED_ORIGINS
+            + [origin.strip().rstrip("/") for origin in _extra_cors_origins.split(",") if origin.strip()]
+        )
+    )
+
+# Password reset is a POST endpoint and the frontend sends JSON.
+CORS_ALLOW_CREDENTIALS = False
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://study-hub-gold-delta.vercel.app",
+]
+
+_extra_csrf_origins = os.getenv("CSRF_TRUSTED_ORIGINS", "")
+if _extra_csrf_origins:
+    CSRF_TRUSTED_ORIGINS = list(
+        dict.fromkeys(
+            CSRF_TRUSTED_ORIGINS
+            + [origin.strip().rstrip("/") for origin in _extra_csrf_origins.split(",") if origin.strip()]
+        )
+    )
 
 
 # =========================================================
