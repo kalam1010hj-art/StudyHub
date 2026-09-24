@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-from cloudinary_storage.storage import RawMediaCloudinaryStorage, MediaCloudinaryStorage
+from cloudinary_storage.storage import MediaCloudinaryStorage\nfrom .storage import ResourceCloudinaryStorage
 
 # Create your models here.
 class University(models.Model):
@@ -166,7 +166,7 @@ class Resource(models.Model):
 
     description = models.TextField(blank=True)
 
-    file = models.FileField(upload_to="resources/", storage=RawMediaCloudinaryStorage())
+    file = models.FileField(upload_to="resources/", storage=ResourceCloudinaryStorage())
 
     resource_type = models.CharField(
         max_length=30,
