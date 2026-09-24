@@ -188,7 +188,7 @@ export default function Settings() {
   };
 
   return (
-    <main className={styles.page}>
+    <main className={`${styles.page} ${reduceMotion ? styles.reduceMotion : ""}`}>
       <div className={styles.shell}>
         <header className={styles.header}>
           <div>
