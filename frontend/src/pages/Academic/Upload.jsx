@@ -1,6 +1,5 @@
 import styles from "./Upload.module.css";
 
-import getResoucresfiles from "../../services/resourceServices";
 import { useEffect, useState } from "react";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthProvider";
@@ -63,7 +62,7 @@ function UploadResource() {
     return sem.branch === Number(form.branch);
   });
 
-  const filteredSubjects = subjects.filter((subject, index) => {
+  const filteredSubjects = subjects.filter((subject) => {
     return subject.semester == Number(form.semester);
   });
 
