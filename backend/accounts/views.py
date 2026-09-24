@@ -52,7 +52,7 @@ class UserDetailsView(APIView):
             if serilaizer.is_valid():
                 serilaizer.save()
                 return Response(serilaizer.data)
-            return Response({"errors":serilaizer.errors})
+            return Response({"errors":serilaizer.errors}, status=400)
            
         except User.DoesNotExist:
             return Response({'error':"user does not exist"},status=404)
@@ -149,4 +149,4 @@ class DeleteAccountView(APIView):
         Token.objects.filter(user=user).delete()
         user.delete()
 
-        return Response({"detail": "Account deleted successfully."}, status=204)
+        return Response(status=204)
