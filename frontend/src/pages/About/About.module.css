@@ -1,0 +1,18 @@
+.page { min-height: 70vh; background: #f8fafc; color: #0f172a; padding-bottom: 5rem; }
+.hero { max-width: 900px; margin: 0 auto; padding: 6rem 1.25rem 4rem; text-align: center; }
+.badge { display: inline-flex; align-items: center; gap: .5rem; padding: .45rem .8rem; border: 1px solid #e2e8f0; border-radius: 999px; background: #fff; color: #475569; font-size: .85rem; font-weight: 600; }
+.hero h1 { margin: 1.25rem 0 1rem; font-size: clamp(2.25rem, 6vw, 4.5rem); line-height: 1.02; letter-spacing: -.05em; }
+.hero p { max-width: 680px; margin: 0 auto; color: #64748b; font-size: clamp(1rem, 2vw, 1.15rem); line-height: 1.75; }
+.content { max-width: 1100px; margin: 0 auto; padding: 0 1.25rem; }
+.story { max-width: 760px; margin-bottom: 3rem; }
+.eyebrow { color: #6366f1; font-size: .75rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.story h2, .cta h2 { margin: .55rem 0 .8rem; font-size: clamp(1.7rem, 4vw, 2.5rem); letter-spacing: -.035em; }
+.story p, .card p, .cta p { color: #64748b; line-height: 1.75; }
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.card { background: #fff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 1.4rem; box-shadow: 0 10px 30px rgba(15,23,42,.04); }
+.icon { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 12px; background: #eef2ff; color: #4f46e5; margin-bottom: 1rem; }
+.card h3 { margin: 0 0 .5rem; font-size: 1.05rem; }
+.cta { margin-top: 1rem; padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; background: #0f172a; color: #fff; border-radius: 20px; }
+.cta p { color: #cbd5e1; margin-bottom: 0; }
+.button { flex: 0 0 auto; display: inline-flex; align-items: center; gap: .5rem; padding: .8rem 1rem; border-radius: 10px; background: #fff; color: #0f172a; text-decoration: none; font-weight: 700; }
+@media (max-width: 760px) { .hero { padding: 4rem 1rem 2.5rem; } .content { padding: 0 1rem; } .grid { grid-template-columns: 1fr; } .cta { flex-direction: column; align-items: flex-start; } .button { width: 100%; justify-content: center; } .page { padding-bottom: 3rem; } }
