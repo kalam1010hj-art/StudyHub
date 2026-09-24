@@ -59,13 +59,21 @@
 
 .sectionHeader {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
+  gap: 1rem;
   margin-bottom: 1.25rem;
 }
 
 .sectionHeader .cardHeading {
-  margin-bottom: 0;
+  margin-bottom: 0.25rem;
+}
+
+.sectionSubtitle {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.5;
 }
 
 .countBadge {
@@ -355,63 +363,52 @@
   line-height: 1.5;
 }
 
-/* 5. Contributions Section */
-.contributionsGrid {
+/* 5. Uploaded Resources Section */
+.resourceGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
 }
 
-.contributionCard {
-  background-color: var(--bg-hover);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 1rem;
+.emptyUploads {
+  min-height: 220px;
+  border: 1px dashed var(--border-interactive);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, #ffffff 0%, var(--bg-hover) 100%);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: 0.75rem;
-  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem 1.25rem;
 }
 
-.contributionCard:hover {
-  border-color: var(--border-interactive);
-  background-color: #ffffff;
-}
-
-.contributionMeta {
+.emptyUploadsIcon {
+  width: 52px;
+  height: 52px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  color: var(--accent-blue);
+  background-color: var(--bg-badge-blue);
+  border: 1px solid rgba(37, 99, 235, 0.14);
+  margin-bottom: 0.9rem;
 }
 
-.typeBadge {
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  background-color: var(--bg-card);
-  padding: 0.15rem 0.5rem;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-subtle);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
-.subjectText {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.contributionTitle {
-  font-size: 0.9375rem;
-  font-weight: 600;
-  color: var(--text-primary);
+.emptyUploads h3 {
   margin: 0;
-  line-height: 1.4;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.emptyUploads p {
+  max-width: 360px;
+  margin: 0.4rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
 }
 
 /* RESPONSIVE DESIGN BREAKPOINTS */
@@ -459,6 +456,10 @@
     grid-template-columns: 1fr;
   }
 
+  .resourceGrid {
+    grid-template-columns: 1fr;
+  }
+
   .reputationValueRow {
     justify-content: center;
   }
@@ -489,7 +490,12 @@
     justify-content: center;
   }
 
-  .contributionsGrid {
-    grid-template-columns: 1fr;
+  .sectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .countBadge {
+    align-self: flex-start;
   }
 }
