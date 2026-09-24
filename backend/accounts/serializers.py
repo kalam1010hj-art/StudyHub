@@ -44,6 +44,7 @@ class UserInfoSerializer(serializers.ModelSerializer):
             'github_url',
             'linkedin_url',
             'website_url',
+            'is_staff',
         ]
 
         read_only_fields = [
@@ -54,6 +55,7 @@ class UserInfoSerializer(serializers.ModelSerializer):
             'is_verified_student',
             'reputation_points',
             'date_joined',
+            'is_staff',
         ]
 class PublicProfileSerializer(serializers.ModelSerializer):
     resources = MyResourceSerializer(source="uploaded_resources", many=True, read_only=True)
