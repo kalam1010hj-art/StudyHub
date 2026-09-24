@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import  University,College,Degree,Branch,Subject,Semester,Resource,CollegeProgram
-from .serializers import UniversitySerailizer,CollegeSerializer,DegreeSerializer,BranchSerializer,SubjectSerializer,SemesterSerializer,ResourceSerializer,CollegeProgramSerializer
+from .serializers import UniversitySerailizer,CollegeSerializer,DegreeSerializer,BranchSerializer,SubjectSerializer,SemesterSerializer,ResourceSerializer,MyResourceSerializer,CollegeProgramSerializer
 from rest_framework.permissions import IsAdminUser,IsAuthenticated,IsAuthenticatedOrReadOnly,AllowAny
 from .permissions import IsAdminForWrite,IsAuthenticatedForWrite
 # Create your views here.
@@ -452,6 +452,21 @@ class ResourceView(APIView):
             return Response(serializer.data, status=201)
 
         return Response(serializer.errors, status=400)
+
+
+class MyUploadsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        resources = (
+            Resource.objects
+            .filter(uploaded_by=request.user)
+            .select_related("subject")
+            .order_by("-created_at")
+        )
+
+        serializer = MyResourceSerializer(resources, many=True)
+        return Response(serializer.data)
 
 
 class ResourceDetailsView(APIView):
