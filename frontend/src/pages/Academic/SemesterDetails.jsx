@@ -11,13 +11,14 @@ import {
 import styles from "./SemesterDetails.module.css";
 import { useEffect, useState } from "react";
 import { getSubjects } from "../../services/collegeServices";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import SubjectCard from "../../components/Academic/SubjectCard/SubjectCard";
 
 function SemesterDetails() {
   let [semester,setSemester] =useState({})
   let [subjects,setSubjects] = useState([])
   let {semesterId} = useParams()
+  const navigate = useNavigate();
   
 
   useEffect(()=>{
@@ -30,7 +31,7 @@ function SemesterDetails() {
   .catch((response)=>{
     console.log(response)
   })
-  },[])
+  },[semesterId])
   if (!semester) {
     return (
       <section className={styles.emptyState}>
@@ -45,7 +46,9 @@ function SemesterDetails() {
         </p>
 
         <button
+          type="button"
           className={styles.backButton}
+          onClick={() => navigate(-1)}
          
         >
           <ArrowLeft size={17} />
@@ -61,7 +64,9 @@ function SemesterDetails() {
 
         {/* Back */}
         <button
+          type="button"
           className={styles.backLink}
+          onClick={() => navigate(-1)}
        
         >
           <ArrowLeft size={17} />
