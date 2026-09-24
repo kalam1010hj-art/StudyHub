@@ -16,3 +16,41 @@
 .cta p { color: #cbd5e1; margin-bottom: 0; }
 .button { flex: 0 0 auto; display: inline-flex; align-items: center; gap: .5rem; padding: .8rem 1rem; border-radius: 10px; background: #fff; color: #0f172a; text-decoration: none; font-weight: 700; }
 @media (max-width: 760px) { .hero { padding: 4rem 1rem 2.5rem; } .content { padding: 0 1rem; } .grid { grid-template-columns: 1fr; } .cta { flex-direction: column; align-items: flex-start; } .button { width: 100%; justify-content: center; } .page { padding-bottom: 3rem; } }
+
+
+/* Global mobile safety for this page */
+@media (max-width: 640px) {
+  .page,
+  .container {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .page {
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3,
+  p,
+  a,
+  button,
+  label {
+    overflow-wrap: anywhere;
+  }
+
+  img,
+  svg,
+  video,
+  canvas {
+    max-width: 100%;
+  }
+
+  input,
+  select,
+  textarea,
+  button {
+    max-width: 100%;
+  }
+}
