@@ -33,7 +33,13 @@ function editUserProfile(userData) {
   const formData = new FormData();
 
   for (const [key, value] of Object.entries(userData)) {
-    // Don't send null or undefined values
+    if (key === "avatar" && value === null) {
+      // Multipart form data cannot send JavaScript null directly.
+      // An empty avatar value tells Django to clear the ImageField.
+      formData.append("avatar", "");
+      continue;
+    }
+
     if (value !== null && value !== undefined) {
       formData.append(key, value);
     }
