@@ -176,7 +176,7 @@ export default function EditProfile() {
 let navigate = useNavigate()
   const {
     userdata,
-    setUserdata,
+    setProfile,
   } = useContext(AuthContext);
 
   // -------------------------------------------------------
@@ -386,8 +386,8 @@ let navigate = useNavigate()
         response.data
       );
 
-      // Update global user
-      setUserdata(response.data);
+      // Update global user and keep localStorage in sync
+      setProfile(response.data);
 
       // Update local form
       setFormData({
