@@ -154,3 +154,126 @@ class DeleteAccountView(APIView):
         user.delete()
 
         return Response(status=204)
+
+
+class ForgotPasswordView(APIView):
+    """
+    Send a password-reset link to the email address associated with an account.
+
+    The response is intentionally generic so callers cannot use this endpoint
+    to discover whether an email address is registered.
+    """
+
+    authentication_classes = []
+    permission_classes = []
+
+    def post(self, request):
+        from django.conf import settings
+        from django.contrib.auth.tokens import default_token_generator
+        from django.core.mail import send_mail
+        from django.urls import reverse
+        from django.utils.http import urlsafe_base64_encode
+        from django.utils.encoding import force_bytes
+
+        email = (request.data.get("email") or "").strip()
+
+        if not email:
+            return Response(
+                {"detail": "If an account exists for that email, a reset link has been sent."},
+                status=200,
+            )
+
+        users = User.objects.filter(email__iexact=email, is_active=True)
+
+        for user in users:
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = default_token_generator.make_token(user)
+            reset_url = (
+                f"{settings.FRONTEND_URL.rstrip('/')}/reset-password/{uid}/{token}"
+            )
+
+            send_mail(
+                subject="Reset your StudyHub password",
+                message=(
+                    f"Hi {user.first_name or user.username},\\n\\n"
+                    "We received a request to reset your StudyHub password. "
+                    "Use the link below to choose a new password:\\n\\n"
+                    f"{reset_url}\\n\\n"
+                    "This link is valid for a limited time and becomes invalid "
+                    "after your password is changed. If you did not request this, "
+                    "you can safely ignore this email.\\n\\n"
+                    "StudyHub"
+                ),
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[user.email],
+                fail_silently=False,
+            )
+
+        return Response(
+            {"detail": "If an account exists for that email, a reset link has been sent."},
+            status=200,
+        )
+
+
+class ResetPasswordView(APIView):
+    """
+    Validate a password-reset token and set a new password.
+    """
+
+    authentication_classes = []
+    permission_classes = []
+
+    def post(self, request):
+        from django.contrib.auth.tokens import default_token_generator
+        from django.core.exceptions import ValidationError
+        from django.utils.encoding import force_str
+        from django.utils.http import urlsafe_base64_decode
+
+        uid = request.data.get("uid")
+        token = request.data.get("token")
+        new_password = request.data.get("password")
+        confirm_password = request.data.get("confirm_password")
+
+        if not uid or not token or not new_password or not confirm_password:
+            return Response(
+                {"detail": "All fields are required."},
+                status=400,
+            )
+
+        if new_password != confirm_password:
+            return Response(
+                {"detail": "Passwords do not match."},
+                status=400,
+            )
+
+        try:
+            user_id = force_str(urlsafe_base64_decode(uid))
+            user = User.objects.get(pk=user_id, is_active=True)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            return Response(
+                {"detail": "This password reset link is invalid or expired."},
+                status=400,
+            )
+
+        if not default_token_generator.check_token(user, token):
+            return Response(
+                {"detail": "This password reset link is invalid or expired."},
+                status=400,
+            )
+
+        try:
+            validate_password(new_password, user=user)
+        except ValidationError as exc:
+            return Response(
+                {"detail": " ".join(exc.messages)},
+                status=400,
+            )
+
+        user.set_password(new_password)
+        user.save(update_fields=["password", "updated_at"])
+
+        # Existing DRF tokens remain valid only until the user logs out.
+        # Remove them here so a password reset invalidates existing sessions.
+        Token.objects.filter(user=user).delete()
+
+        return Response({"detail": "Password reset successfully."}, status=200)
