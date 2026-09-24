@@ -27,3 +27,20 @@ function changePassword(passwordData) {
 }
 
 export { changePassword };
+
+
+function logoutAccount() {
+  const token = localStorage.getItem("token");
+
+  return axios.post(
+    `${API_URL}/account/logout`,
+    {},
+    {
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    }
+  );
+}
+
+export { logoutAccount };
