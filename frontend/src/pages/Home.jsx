@@ -15,7 +15,7 @@ function Home() {
     return ()=>{
         console.log("Home unmounted")
     }
-  })
+  }, [])
   return (
     <main>
       <Hero />
