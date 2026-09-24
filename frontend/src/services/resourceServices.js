@@ -41,3 +41,16 @@ function getMyUploads() {
 }
 
 export { getMyUploads };
+
+
+function deleteResource(resourceId) {
+  const token = localStorage.getItem("token");
+
+  return axios.delete(`${API_URL}/Hub/resource/${resourceId}`, {
+    headers: {
+      Authorization: `Token ${token}`,
+    },
+  });
+}
+
+export { deleteResource };
