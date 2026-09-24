@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from .models import User
+from academics.serializers import MyResourceSerializer
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(max_length = 200)
@@ -55,6 +56,8 @@ class UserInfoSerializer(serializers.ModelSerializer):
             'date_joined',
         ]
 class PublicProfileSerializer(serializers.ModelSerializer):
+    resources = MyResourceSerializer(source="uploaded_resources", many=True, read_only=True)
+
     class Meta:
         model = User
         fields = [
@@ -75,6 +78,7 @@ class PublicProfileSerializer(serializers.ModelSerializer):
                     'github_url',
                     'linkedin_url',
                     'website_url',
+                    'resources',
                     ]
 
 
