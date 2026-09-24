@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from .models import  University,College,Degree,Branch,Subject,Semester,Resource,CollegeProgram
 from .serializers import UniversitySerailizer,CollegeSerializer,DegreeSerializer,BranchSerializer,SubjectSerializer,SemesterSerializer,ResourceSerializer,MyResourceSerializer,CollegeProgramSerializer
 from rest_framework.permissions import IsAdminUser,IsAuthenticated,IsAuthenticatedOrReadOnly,AllowAny
+from django.db.models import ProtectedError
 from .permissions import IsAdminForWrite,IsAuthenticatedForWrite
 # Create your views here.
 
@@ -265,6 +266,11 @@ class BranchDetailsView(APIView):
                 {"error": "No Branch found"},
                 status=404
             )
+        except ProtectedError:
+            return Response(
+                {"error": "This branch cannot be deleted because it has resources that depend on it."},
+                status=409
+            )
 
 class SubjectView(APIView):
     permission_classes = [IsAdminForWrite]
@@ -342,6 +348,11 @@ class SubjectDetailsView(APIView):
                 {"error": "No Subject found"},
                 status=404
             )
+        except ProtectedError:
+            return Response(
+                {"error": "This subject cannot be deleted because resources are attached to it."},
+                status=409
+            )
 
 class SemesterView(APIView):
     permission_classes = [IsAdminForWrite]
@@ -416,6 +427,11 @@ class SemesterDetailsView(APIView):
             return Response(
                 {"error": "No Semester found"},
                 status=404
+            )
+        except ProtectedError:
+            return Response(
+                {"error": "This semester cannot be deleted because it contains subjects with resources."},
+                status=409
             )
 
 
