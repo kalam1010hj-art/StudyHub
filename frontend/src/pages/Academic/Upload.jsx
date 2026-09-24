@@ -4,7 +4,7 @@ import getResoucresfiles from "../../services/resourceServices";
 import { useEffect, useState } from "react";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthProvider";
-import { Upload } from "lucide-react";
+import { AlertCircle, CheckCircle2, Loader2, RefreshCw } from "lucide-react";
 import { postResoucreFile } from "../../services/resourceServices";
 import { getResourceDetails } from "../../services/resourceServices";
 function UploadResource() {
@@ -32,6 +32,10 @@ function UploadResource() {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoadingDirectory, setIsLoadingDirectory] = useState(true);
+  const [directoryError, setDirectoryError] = useState("");
+  const [submitError, setSubmitError] = useState("");
+  const [submitSuccess, setSubmitSuccess] = useState("");
 
   //   Resource form data stored  in this field.
   const [resourceForm, setResourceForm] = useState({
@@ -168,64 +172,111 @@ function UploadResource() {
     });
   }
 
-  function HandleSubmit() {
-    console.log("handle submit started");
-   
+  const getApiErrorMessage = (error, fallback) => {
+    const data = error?.response?.data;
+
+    if (typeof data === "string" && data.trim()) return data;
+    if (data?.detail) return data.detail;
+    if (data?.message) return data.message;
+
+    if (data && typeof data === "object") {
+      const firstError = Object.values(data)
+        .flat(Infinity)
+        .find((value) => typeof value === "string" && value.trim());
+
+      if (firstError) return firstError;
+    }
+
+    if (error?.message) return error.message;
+    return fallback;
+  };
+
+  const resetResourceForm = () => {
+    setForm({
+      university: "",
+      college: "",
+      program: "",
+      branch: "",
+      semester: "",
+      subject: "",
+      title: "",
+      description: "",
+      resourceType: "",
+    });
+
+    setResourceForm({
+      title: "",
+      description: "",
+      file: null,
+      resource_type: "",
+      subject: "",
+      uploaded_by: "",
+    });
+  };
+
+  async function HandleSubmit() {
+    if (isSubmitting) return;
+
+    setSubmitError("");
+    setSubmitSuccess("");
+
     if (!form.university) {
-      alert("Please select a university");
+      setSubmitError("Please select a university.");
       return;
     }
 
     if (!form.college) {
-      alert("Please select a college");
+      setSubmitError("Please select a college.");
       return;
     }
 
     if (!form.program) {
-      alert("Please select a program");
+      setSubmitError("Please select a program.");
       return;
     }
 
     if (!form.branch) {
-      alert("Please select a branch");
+      setSubmitError("Please select a branch.");
       return;
     }
 
     if (!form.semester) {
-      alert("Please select a semester");
+      setSubmitError("Please select a semester.");
       return;
     }
 
     if (!form.subject) {
-      alert("Please select a subject");
+      setSubmitError("Please select a subject.");
       return;
     }
 
     if (!resourceForm.title.trim()) {
-      alert("Please enter a resource title");
+      setSubmitError("Please enter a resource title.");
       return;
     }
 
     if (!resourceForm.description.trim()) {
-      alert("Please enter a description");
+      setSubmitError("Please enter a description.");
       return;
     }
 
     if (!resourceForm.resource_type) {
-      alert("Please select a resource type");
+      setSubmitError("Please select a resource type.");
       return;
     }
 
     if (!resourceForm.file) {
-      alert("Please select a file");
+      setSubmitError("Please select a file to upload.");
       return;
     }
 
     if (!userdata) {
-      alert("User information is not available");
+      setSubmitError("Your user information is not available. Please sign in again.");
       return;
     }
-   setIsSubmitting(true);
+
+    setIsSubmitting(true);
+
     const resourceData = {
       title: resourceForm.title.trim(),
       description: resourceForm.description.trim(),
@@ -235,58 +286,137 @@ function UploadResource() {
       uploaded_by: userdata.id,
     };
 
-    postResoucreFile(resourceData)
-      .then((response) => {
-        console.log("data added sucess fully");
-        console.log(response.data);
-        setIsSubmitting(false)
-        setForm({
-          university: "",
-          college: "",
-          program: "",
-          branch: "",
-          semester: "",
-          subject: "",
+    try {
+      const response = await postResoucreFile(resourceData);
+      console.log("Resource uploaded successfully:", response.data);
 
-          title: "",
-          description: "",
-          resourceType: "",
-        });
-        setResourceForm({
-          title: "",
-          description: "",
-          file: null,
-          resource_type: "",
-          subject: "",
-          uploaded_by: "",
-        });
-      })
-      .catch((error) => {
-           console.log("STATUS:", error.response?.status);
-    console.log("DATA:", error.response?.data);
-    console.log("HEADERS:", error.response?.headers);
-        setIsSubmitting(false)
-      });
+      const uploadedTitle = resourceData.title;
+      resetResourceForm();
+      setSubmitSuccess(
+        '"' + uploadedTitle + '" was uploaded successfully and added to StudyHub.'
+      );
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (error) {
+      console.error("Resource upload failed:", error);
+      console.error("Status:", error.response?.status);
+      console.error("Data:", error.response?.data);
+
+      setSubmitError(
+        getApiErrorMessage(
+          error,
+          "We couldn't upload your resource. Please check the form and try again."
+        )
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   }
   console.log("Form Data : ", form);
+  const loadDirectory = async () => {
+    setIsLoadingDirectory(true);
+    setDirectoryError("");
+
+    try {
+      const response = await getResourceDetails();
+      const data = response.data || {};
+
+      setUniversity(Array.isArray(data.universities) ? data.universities : []);
+      setColleges(Array.isArray(data.colleges) ? data.colleges : []);
+      setPrograms(Array.isArray(data.programs) ? data.programs : []);
+      setBranches(Array.isArray(data.branches) ? data.branches : []);
+      setSemesters(Array.isArray(data.semesters) ? data.semesters : []);
+      setSubjects(Array.isArray(data.subjects) ? data.subjects : []);
+    } catch (error) {
+      console.error("Failed to load academic directory:", error);
+      setDirectoryError(
+        getApiErrorMessage(
+          error,
+          "Unable to load the academic directory. Please try again."
+        )
+      );
+    } finally {
+      setIsLoadingDirectory(false);
+    }
+  };
+
   useEffect(() => {
-    getResourceDetails()
-      .then((response) => {
-        setUniversity(response.data.universities);
-        setColleges(response.data.colleges);
-        setPrograms(response.data.programs);
-        setBranches(response.data.branches);
-        setSemesters(response.data.semesters);
-        setSubjects(response.data.subjects);
-        console.log(response.data);
-      })
-      .catch((response) => {
-        console.log(response);
-      });
+    loadDirectory();
   }, []);
 
   return (
     <main className={styles.page}>
+      {(submitSuccess || submitError || directoryError) && (
+        <div className={styles.statusArea} role="status" aria-live="polite">
+          {submitSuccess && (
+            <div className={styles.successMessage}>
+              <CheckCircle2 size={20} />
+              <div>
+                <strong>Upload successful</strong>
+                <span>{submitSuccess}</span>
+              </div>
+              <button
+                type="button"
+                className={styles.dismissButton}
+                onClick={() => setSubmitSuccess("")}
+                aria-label="Dismiss success message"
+              >
+                ×
+              </button>
+            </div>
+          )}
+
+          {submitError && (
+            <div className={styles.errorMessage} role="alert">
+              <AlertCircle size={20} />
+              <div>
+                <strong>Upload failed</strong>
+                <span>{submitError}</span>
+              </div>
+              <button
+                type="button"
+                className={styles.dismissButton}
+                onClick={() => setSubmitError("")}
+                aria-label="Dismiss error message"
+              >
+                ×
+              </button>
+            </div>
+          )}
+
+          {directoryError && (
+            <div className={styles.errorMessage} role="alert">
+              <AlertCircle size={20} />
+              <div>
+                <strong>Could not load academic data</strong>
+                <span>{directoryError}</span>
+              </div>
+              <button
+                type="button"
+                className={styles.retryInlineButton}
+                onClick={loadDirectory}
+                disabled={isLoadingDirectory}
+              >
+                <RefreshCw
+                  size={15}
+                  className={isLoadingDirectory ? styles.spin : undefined}
+                />
+                Retry
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {isLoadingDirectory && (
+        <div className={styles.loadingState} role="status" aria-live="polite">
+          <Loader2 size={22} className={styles.spin} />
+          <div>
+            <strong>Loading academic directory</strong>
+            <span>Preparing universities, colleges, programs, semesters, and subjects…</span>
+          </div>
+        </div>
+      )
       {/* =====================================================
         PAGE HEADER
        ===================================================== */}
@@ -338,6 +468,7 @@ function UploadResource() {
               id="University"
               name="university"
               value={form.university}
+              disabled={isLoadingDirectory || !!directoryError || isSubmitting}
               onChange={(e) => HandleChange(e)}
             >
               <option value="">Select a university</option>
@@ -365,7 +496,7 @@ function UploadResource() {
               id="college"
               name="college"
               value={form.college}
-              disabled={!form.university}
+              disabled={!form.university || isSubmitting}
               onChange={(e) => HandleChange(e)}
             >
               <option value="">
@@ -397,7 +528,7 @@ function UploadResource() {
               id="programs"
               name="program"
               value={form.program}
-              disabled={!form.college}
+              disabled={!form.college || isSubmitting}
               onChange={(e) => HandleChange(e)}
             >
               <option value="">
@@ -427,7 +558,7 @@ function UploadResource() {
               id="branch"
               name="branch"
               value={form.branch}
-              disabled={!form.program}
+              disabled={!form.program || isSubmitting}
               onChange={(e) => HandleChange(e)}
             >
               <option value="">
@@ -457,7 +588,7 @@ function UploadResource() {
               id="semester"
               name="semester"
               value={form.semester}
-              disabled={!form.branch}
+              disabled={!form.branch || isSubmitting}
               onChange={(e) => HandleChange(e)}
             >
               <option value="">
@@ -487,7 +618,7 @@ function UploadResource() {
               id="subject"
               name="subject"
               value={form.subject}
-              disabled={!form.semester}
+              disabled={!form.semester || isSubmitting}
               onChange={(e) => HandleChange(e)}
             >
               <option value="">
@@ -599,8 +730,13 @@ function UploadResource() {
               name="title"
               id="title"
               placeholder="e.g. Data Structures — Unit 1 Notes"
-              onChange={(e) => HandelResoucreFormChange(e)}
+              onChange={(e) => {
+                setSubmitError("");
+                setSubmitSuccess("");
+                HandelResoucreFormChange(e);
+              }}
               value={resourceForm.title}
+              disabled={isSubmitting}
             />
 
             <span className={styles.helper}>
@@ -617,8 +753,13 @@ function UploadResource() {
               name="description"
               id="description"
               placeholder="Briefly describe what this resource contains..."
-              onChange={(e) => HandelResoucreFormChange(e)}
+              onChange={(e) => {
+                setSubmitError("");
+                setSubmitSuccess("");
+                HandelResoucreFormChange(e);
+              }}
               value={resourceForm.description}
+              disabled={isSubmitting}
             />
 
             <span className={styles.helper}>
@@ -635,8 +776,13 @@ function UploadResource() {
             <select
               name="resource_type"
               id="resource_type"
-              onChange={(e) => HandelResoucreFormChange(e)}
+              onChange={(e) => {
+                setSubmitError("");
+                setSubmitSuccess("");
+                HandelResoucreFormChange(e);
+              }}
               value={resourceForm.resource_type}
+              disabled={isSubmitting}
             >
               <option value="">Select resource type</option>
 
@@ -685,11 +831,15 @@ function UploadResource() {
                 name="file"
                 id="resourcefile"
                 onChange={(event) => {
+                  setSubmitError("");
+                  setSubmitSuccess("");
                   setResourceForm({
                     ...resourceForm,
-                    file: event.target.files[0],
+                    file: event.target.files?.[0] || null,
                   });
+                  event.target.value = "";
                 }}
+                disabled={isSubmitting}
               />
             </label>
           </div>
@@ -702,21 +852,36 @@ function UploadResource() {
             <div className={styles.submitCheck}>✓</div>
 
             <div>
-              <strong>Ready to contribute?</strong>
+              <strong>
+                {isSubmitting ? "Uploading resource…" : "Ready to contribute?"}
+              </strong>
 
-              <span>Your resource will be added to StudyHub.</span>
+              <span>
+                {isSubmitting
+                  ? "Please keep this page open while the file is being uploaded."
+                  : "Your resource will be added to StudyHub."}
+              </span>
             </div>
           </div>
 
-        <button
-  type="button"
-  className={styles.submitButton}
-  onClick={HandleSubmit}
-  disabled={isSubmitting}
->
-  {isSubmitting ? "Uploading..." : "Upload resource"}
-  <span>{isSubmitting ? "..." : "→"}</span>
-</button>
+          <button
+            type="button"
+            className={styles.submitButton}
+            onClick={HandleSubmit}
+            disabled={isSubmitting || isLoadingDirectory || !!directoryError}
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 size={17} className={styles.spin} />
+                Uploading…
+              </>
+            ) : (
+              <>
+                Upload resource
+                <span>→</span>
+              </>
+            )}
+          </button>
         </div>
       </section>
     </main>
