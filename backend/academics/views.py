@@ -487,6 +487,11 @@ class MyUploadsView(APIView):
 
 class ResourceDetailsView(APIView):
 
+    def _can_modify(self, user, resource):
+        return user.is_authenticated and (
+            user.is_staff or resource.uploaded_by_id == user.id
+        )
+
     def get(self, request, pk):
         try:
             resource = Resource.objects.get(id=pk)
@@ -502,6 +507,12 @@ class ResourceDetailsView(APIView):
     def put(self, request, pk):
         try:
             resource = Resource.objects.get(id=pk)
+
+            if not self._can_modify(request.user, resource):
+                return Response(
+                    {"detail": "You do not have permission to edit this resource."},
+                    status=403,
+                )
 
             serializer = ResourceSerializer(
                 resource,
@@ -523,6 +534,13 @@ class ResourceDetailsView(APIView):
     def delete(self, request, pk):
         try:
             resource = Resource.objects.get(id=pk)
+
+            if not self._can_modify(request.user, resource):
+                return Response(
+                    {"detail": "You do not have permission to delete this resource."},
+                    status=403,
+                )
+
             resource.delete()
             return Response(status=204)
 
