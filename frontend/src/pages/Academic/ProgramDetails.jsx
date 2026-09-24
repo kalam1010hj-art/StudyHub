@@ -8,7 +8,6 @@ import styles from "./ProgramDetails.module.css";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getBranches } from "../../services/collegeServices";
-import { getSemesters } from "../../services/collegeServices";
 
 
 export default function ProgramDetails() {
@@ -30,7 +29,7 @@ export default function ProgramDetails() {
     .catch((response)=>{
        console.log(response)
     })
-  },[])
+  },[programId])
   return (
     <main className={styles.page}>
       <div className={styles.container}>
