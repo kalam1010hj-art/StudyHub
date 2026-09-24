@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import UniversityView,UnviersityDetailsView,CollegeDetailsView,CollegeView,DegreeView,DegreeDetailsView,BranchView,BranchDetailsView,SemesterView,SemesterDetailsView,SubjectView,SubjectDetailsView,ResourceDetailsView,ResourceView,CollegeProgramDetailsView,CollegeProgramView,Academic_directory
+from .views import UniversityView,UnviersityDetailsView,CollegeDetailsView,CollegeView,DegreeView,DegreeDetailsView,BranchView,BranchDetailsView,SemesterView,SemesterDetailsView,SubjectView,SubjectDetailsView,ResourceDetailsView,ResourceView,MyUploadsView,CollegeProgramDetailsView,CollegeProgramView,Academic_directory
 urlpatterns = [
     path('university',UniversityView.as_view()),
     path('university/<int:pk>',UnviersityDetailsView.as_view()),
@@ -21,6 +21,7 @@ urlpatterns = [
 
     path('resource',ResourceView.as_view()),
     path('resource/<int:pk>',ResourceDetailsView.as_view()),
+    path('my-uploads', MyUploadsView.as_view()),
 
 
     path('collegeprogram',CollegeProgramView.as_view()),
