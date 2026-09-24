@@ -44,3 +44,17 @@ function logoutAccount() {
 }
 
 export { logoutAccount };
+
+
+function deleteAccount(password) {
+  const token = localStorage.getItem("token");
+
+  return axios.delete(`${API_URL}/account/delete-account`, {
+    headers: {
+      Authorization: `Token ${token}`,
+    },
+    data: { password },
+  });
+}
+
+export { deleteAccount };
