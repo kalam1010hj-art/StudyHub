@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowUpRight,
@@ -11,7 +11,9 @@ import {
 } from "lucide-react";
 
 import ResourceCard from "../../components/Academic/ResourceCard/ResourceCard";
-import { getMyUploads } from "../../services/resourceServices";
+import { deleteResource, getMyUploads } from "../../services/resourceServices";
+import getProfile from "../../services/UserServices";
+import { AuthContext } from "../../context/AuthProvider";
 import styles from "./MyUploads.module.css";
 
 const TYPE_FILTERS = [
@@ -49,6 +51,8 @@ const MyUploads = () => {
   const [activeType, setActiveType] = useState("all");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [deletingId, setDeletingId] = useState(null);
+  const { setProfile } = useContext(AuthContext);
 
   const fetchUploads = async () => {
     setLoading(true);
@@ -68,6 +72,30 @@ const MyUploads = () => {
   useEffect(() => {
     fetchUploads();
   }, []);
+
+  const handleDelete = async (resource) => {
+    const confirmed = window.confirm(
+      'Delete "' + resource.title + '"? This will permanently remove the resource and deduct 10 reputation points.'
+    );
+
+    if (!confirmed) return;
+
+    setDeletingId(resource.id);
+    setError("");
+
+    try {
+      await deleteResource(resource.id);
+      setUploads((current) => current.filter((item) => item.id !== resource.id));
+
+      const profileResponse = await getProfile();
+      if (profileResponse?.data) setProfile(profileResponse.data);
+    } catch (error) {
+      console.error("Failed to delete resource:", error);
+      setError(getErrorMessage(error) || "Unable to delete this resource.");
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   const visibleUploads = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -208,7 +236,7 @@ const MyUploads = () => {
         {!loading && !error && visibleUploads.length > 0 && (
           <section className={styles.grid}>
             {visibleUploads.map((resource) => (
-              <ResourceCard key={resource.id} resource={resource} />
+              <ResourceCard\n                key={resource.id}\n                resource={resource}\n                onDelete={handleDelete}\n                deleting={deletingId === resource.id}\n              />
             ))}
           </section>
         )}
