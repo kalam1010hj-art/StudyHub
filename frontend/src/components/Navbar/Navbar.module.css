@@ -554,9 +554,17 @@
 .mobileAvatar {
   width: 40px;
   height: 40px;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: var(--sh-radius-full);
   object-fit: cover;
+  background: var(--sh-surface-hover);
   border: 1px solid #cbd5e1;
+  color: var(--sh-text-muted);
+  font-size: 0.9rem;
+  font-weight: 700;
 }
 
 .mobileUserName {
