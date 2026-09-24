@@ -206,6 +206,9 @@ STATIC_URL = "/static/"
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = "/media/"
+
 
 # =========================================================
 # EMAIL
@@ -224,6 +227,15 @@ CLOUDINARY_STORAGE = {
     "API_SECRET": os.getenv("CLOUDINARY_API_SECRET"),
 }
 
+CLOUDINARY_CONFIGURED = all(
+    os.getenv(name)
+    for name in (
+        "CLOUDINARY_CLOUD_NAME",
+        "CLOUDINARY_API_KEY",
+        "CLOUDINARY_API_SECRET",
+    )
+)
+
 
 # =========================================================
 # STORAGE
@@ -233,7 +245,11 @@ STORAGES = {
     # User uploaded files:
     # PDFs, university logos, college logos, etc.
     "default": {
-        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+        "BACKEND": (
+            "cloudinary_storage.storage.MediaCloudinaryStorage"
+            if CLOUDINARY_CONFIGURED
+            else "django.core.files.storage.FileSystemStorage"
+        ),
     },
 
     # Django static files:
