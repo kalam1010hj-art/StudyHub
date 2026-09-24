@@ -4,6 +4,7 @@ import { ArrowRight, GraduationCap, Search } from "lucide-react";
 import Breadcrumbs from "../../components/Academic/Breadcrumbs/Breadcrumbs";
 import AcademicSearch from "../../components/Academic/AcademicSearch/AcademicSearch";
 import UniversityCard from "../../components/Academic/UniversityCard/UniversityCard";
+import InstitutionRequestCTA from "../../components/InstitutionRequestCTA/InstitutionRequestCTA";
 
 import styles from "./Universities.module.css";
 import getUniversities from "../../services/universityService";
@@ -145,6 +146,7 @@ export default function Universities() {
 
      
 
+        <InstitutionRequestCTA />
       </div>
     </main>
   );
