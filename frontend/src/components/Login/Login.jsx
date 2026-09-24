@@ -174,7 +174,7 @@ export default function Login() {
               </label>
               <Link to="/forgot-password" className={styles.forgotLink}>
                 Forgot password?
-              </a>
+              </Link>
             </div>
 
             <div className={styles.passwordWrapper}>
