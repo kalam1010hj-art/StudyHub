@@ -6,19 +6,29 @@ export default function UniversityCard({ university }) {
   return (
     <Link to={`/universities/${university.id}`} className={styles.card}>
       <div className={styles.top}>
-        <div className={styles.icon}>
+        {/* <div className={styles.icon}>
           <Building2 size={22} />
-        </div>
+        </div> */}
+         {university.logo ? (
+            <img
+              src={university.logo}
+              alt={`${university.name} logo`}
+            />
+          ) : (
+            <span>
+              {university.code?.charAt(0)}
+            </span>
+          )}
         <span className={styles.code}>{university.code}</span>
       </div>
       <h3>{university.name}</h3>
-      <p>Description</p>
+      <p>{university.description}</p>
       <div className={styles.meta}>
         <span>
           <MapPin size={15} />
-          Hyderabad
+          {university.city || "India"}
         </span>
-        <span>200 Colleges</span>
+        <span></span>
       </div>
       <div className={styles.footer}>
         <span>Explore University</span>

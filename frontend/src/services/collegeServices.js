@@ -2,6 +2,9 @@ import axios from "axios"
 const API_URL = import.meta.env.VITE_API_URL
 
 function getColleges(id){
+    if (id == undefined){
+        return axios.get(`${API_URL}/Hub/college`)
+    }
     return  axios.get(`${API_URL}/Hub/college?university=${id}`)
 }export default getColleges
 

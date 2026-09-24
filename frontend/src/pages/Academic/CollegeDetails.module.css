@@ -104,3 +104,53 @@
   color: #64748b;
   background: #fff;
 }
+/* =========================================================
+   COLLEGE LOGO
+   ========================================================= */
+
+.collegeLogo,
+.icon {
+  width: 76px;
+  height: 76px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+/* Actual college logo */
+
+.collegeLogo {
+  width: 82px;
+  height: 82px;
+  flex-shrink: 0;
+
+  object-fit: contain;
+
+  padding: 16px;
+
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+/* Fallback Building2 icon */
+
+.icon {
+  color: #4f46e5;
+  background: #f8fafc;
+}
+
+.icon svg {
+  width: 25px;
+  height: 25px;
+}

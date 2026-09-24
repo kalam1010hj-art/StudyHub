@@ -1,1 +1,79 @@
-.card{display:flex;flex-direction:column;min-height:155px;padding:1.15rem;text-decoration:none;background:#fff;border:1px solid #e2e8f0;border-radius:15px;transition:.18s ease}.card:hover{transform:translateY(-3px);border-color:#c7d2fe;box-shadow:0 14px 28px rgba(15,23,42,.06)}.icon{display:grid;place-items:center;width:37px;height:37px;border-radius:10px;background:#f8fafc;color:#6366f1}.card h3{margin:.85rem 0 .3rem;color:#0f172a;font-size:.95rem}.card>span{color:#64748b;font-size:.74rem}.footer{display:flex;justify-content:space-between;margin-top:auto;padding-top:.8rem;color:#4f46e5;font-size:.73rem;font-weight:750}.footer svg{transition:transform .18s}.card:hover .footer svg{transform:translateX(4px)}
+/* ==========================================================================
+   Semester Card Component
+   ========================================================================== */
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 1.5rem;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  border-color: #bfdbfe;
+  box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.08),
+              0 4px 6px -2px rgba(0, 0, 0, 0.02);
+}
+
+.card:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+/* Icon Container */
+.icon {
+  width: 42px;
+  height: 42px;
+  background-color: #eff6ff;
+  color: #2563eb;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.card:hover .icon {
+  background-color: #2563eb;
+  color: #ffffff;
+}
+
+/* Card Heading */
+.card h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.3;
+  text-transform: capitalize;
+}
+
+/* Footer & Action Arrow */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #2563eb;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 1rem;
+}
+
+.footer svg {
+  transition: transform 0.2s ease;
+}
+
+.card:hover .footer svg {
+  transform: translateX(4px);
+}

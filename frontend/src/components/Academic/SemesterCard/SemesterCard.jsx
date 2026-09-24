@@ -9,7 +9,7 @@ export default function SemesterCard({ semester }) {
         <Layers3 size={19} />
       </div>
       <h3>{semester.number} semester</h3>
-      <span>1 Resources</span>
+      
       <div className={styles.footer}>
         <span>Explore</span>
         <ArrowRight size={16} />

@@ -1,7 +1,13 @@
 from rest_framework import serializers
 from .models import University,College,Degree,Branch,Subject,Semester,Resource,CollegeProgram
-
+from accounts.models  import User
 # University serializer
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id","first_name","last_name","username","email","avatar"]
 
 class UniversitySerailizer(serializers.ModelSerializer):
 
@@ -35,11 +41,14 @@ class SemesterSerializer(serializers.ModelSerializer):
             model = Semester
             fields = "__all__"
 class ResourceSerializer(serializers.ModelSerializer):
+    uploaded_by = UserSerializer(read_only = True)
     class Meta:
         model = Resource
         fields = "__all__"
+     
 
 class CollegeProgramSerializer(serializers.ModelSerializer):
     class Meta:
         model = CollegeProgram
         fields = "__all__"
+

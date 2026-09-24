@@ -69,11 +69,11 @@ function BranchDetails() {
             </span>
           )}
 
-          {/* {branch.description && (
+          {branch.description && (
             <p className={styles.description}>
               {branch.description}
             </p>
-          )} */}
+          )}
         </div>
       </div>
 

@@ -6,17 +6,35 @@ class University(models.Model):
     name = models.CharField(max_length=200)
     code = models.CharField(max_length=50, unique=True)
 
+    description = models.TextField(blank=True)
+
+    address = models.TextField(blank=True)
+    city = models.CharField(max_length=100, blank=True)
+    state = models.CharField(max_length=100, blank=True)
+    pincode = models.CharField(max_length=10, blank=True)
+
+    website = models.URLField(blank=True)
+    email = models.EmailField(blank=True)
+    phone = models.CharField(max_length=20, blank=True)
+
+    established_year = models.PositiveIntegerField(
+        null=True,
+        blank=True
+    )
+
+    logo = models.ImageField(
+        upload_to="universities/logos/",
+        blank=True,
+        null=True
+    )
+
+    is_active = models.BooleanField(default=True)
+
+   
+    
+
     def __str__(self):
         return self.name
-
-
-    def __str__(self):
-        return self.name
-class Degree(models.Model):
-    name = models.CharField(max_length=200)
-    code = models.CharField(max_length=20, unique=True)
-    def __str__(self):
-            return self.name
 
 class College(models.Model):
     university = models.ForeignKey(
@@ -26,19 +44,84 @@ class College(models.Model):
     )
     name = models.CharField(max_length=200)
     code = models.CharField(max_length=50)
-    degree = models.ManyToManyField(Degree,
-    related_name="colleges")       
+          
+    address = models.TextField(blank=True)
+    city = models.CharField(max_length=100, blank=True)
+    state = models.CharField(max_length=100, blank=True)
+    pincode = models.CharField(max_length=10, blank=True)
 
+    website = models.URLField(blank=True)
+    email = models.EmailField(blank=True)
+    phone = models.CharField(max_length=20, blank=True)
+
+    description = models.TextField(blank=True)
+    afflicatedTo = models.CharField(max_length=20,blank=True)
+    logo = models.ImageField(
+            upload_to="college/logos/",
+            blank=True,
+            null=True
+        )
     def __str__(self):
-        return self.name
+            return self.name
+    
+class Degree(models.Model):
+    name = models.CharField(max_length=200)
+    code = models.CharField(max_length=20, unique=True)
+    description = models.TextField(blank=True)
+    college = models.ForeignKey(College,on_delete=models.CASCADE)
+    duration_years = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True
+    )
+    level = models.CharField(
+        max_length=50,
+        blank=True
+    )
+    stream = models.CharField(
+        max_length=100,
+        blank=True
+    )
+    is_active = models.BooleanField(default=True)
+    def __str__(self):
+            return f"{self.code} {self.college.name}"
+
+
+
+    
+
 class Branch(models.Model):
     name = models.CharField(max_length=200)
     code = models.CharField(max_length=20, unique=True)
-    degree = models.ManyToManyField(Degree,
-                              
-                               related_name="branches")
+
+    degree = models.ForeignKey(
+        Degree,
+        on_delete=models.CASCADE,
+        related_name="branches"
+    )
+
+    degree_code = models.CharField(max_length=100,blank=True)
+
+    short_name = models.CharField(
+        max_length=100,
+        blank=True
+    )
+
+    description = models.TextField(
+        blank=True
+    )
+
+    duration_years = models.PositiveSmallIntegerField(
+        default=4
+    )
+
+    is_active = models.BooleanField(
+        default=True
+    )
+
+    
+
     def __str__(self):
-        return f'{self.name} code {self.code}'
+        return f"{self.name} ({self.code})"
 
 class Semester(models.Model):
     branch = models.ForeignKey(
@@ -50,7 +133,7 @@ class Semester(models.Model):
     
 
     def __str__(self):
-        return f"{self.branch.name} - Semester {self.number}"
+        return f"{self.branch.code} - Semester {self.number}"
 class Subject(models.Model):
     semester = models.ForeignKey(
         Semester,
@@ -62,7 +145,7 @@ class Subject(models.Model):
 
 
     def __str__(self):
-        return f"{self.code} - {self.name}"
+        return f"{self.semester.branch.code} - {self.name}"
 
 class Resource(models.Model):
 
@@ -86,7 +169,7 @@ class Resource(models.Model):
         max_length=30,
         choices=RESOURCE_TYPES
     )
-
+    
     subject = models.ForeignKey(
     "academics.Subject",
     on_delete=models.PROTECT,

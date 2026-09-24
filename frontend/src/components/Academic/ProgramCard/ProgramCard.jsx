@@ -13,7 +13,7 @@ export default function ProgramCard({ program }) {
       <h3>{program.name}</h3>
       <p></p>
       <div className={styles.footer}>
-        <span>211 Resources</span>
+        <span>Explore</span>
         <ArrowRight size={17} />
       </div>
     </Link>

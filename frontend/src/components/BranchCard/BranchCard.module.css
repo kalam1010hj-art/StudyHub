@@ -1,207 +1,176 @@
+/* BranchCard.module.css */
+
+/* Component Variables - Integrates with global tokens if available */
+:root {
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --primary-light: #eef2ff;
+  --primary-border: #c7d2fe;
+
+  --bg-card: #ffffff;
+  --bg-alt: #f8fafc;
+
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --text-light: #94a3b8;
+
+  --border-color: #e2e8f0;
+  --border-hover: #cbd5e1;
+
+  --radius-md: 12px;
+  --radius-sm: 6px;
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.08);
+}
+
+/* Base Card Layout */
 .card {
-  position: relative;
   display: flex;
   align-items: center;
-  gap: 18px;
-
-  width: 100%;
-  padding: 22px;
-
-  background: #ffffff;
-  border: 1px solid #e8eaf0;
-  border-radius: 18px;
-
+  gap: 1rem;
+  padding: 1.25rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  text-decoration: none;
+  color: inherit;
   cursor: pointer;
-
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease,
-    border-color 0.25s ease;
-
-  overflow: hidden;
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  /* Prevent blue highlight on mobile tap */
+  -webkit-tap-highlight-color: transparent; 
 }
 
-.card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-
-  width: 4px;
-  height: 100%;
-
-  background: #4f46e5;
-
-  transform: scaleY(0);
-  transform-origin: bottom;
-
-  transition: transform 0.25s ease;
-}
-
+/* Hover & Active States */
 .card:hover {
-  transform: translateY(-4px);
-
-  border-color: #c7c9ff;
-
-  box-shadow:
-    0 12px 30px rgba(30, 35, 90, 0.10);
+  border-color: var(--primary-border);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  background-color: #ffffff;
 }
 
-.card:hover::before {
-  transform: scaleY(1);
+.card:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
 }
 
-/* Icon */
-
+/* Icon Container */
 .iconWrapper {
-  flex-shrink: 0;
-
-  width: 52px;
-  height: 52px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
-  color: #4f46e5;
-
-  background: #eef2ff;
-  border-radius: 14px;
-
-  transition:
-    background 0.25s ease,
-    color 0.25s ease,
-    transform 0.25s ease;
+  width: 44px;
+  height: 44px;
+  min-width: 44px; /* Prevents shrink on long text */
+  border-radius: var(--radius-md);
+  background-color: var(--primary-light);
+  color: var(--primary);
+  transition: all 0.2s ease;
 }
 
 .card:hover .iconWrapper {
-  background: #4f46e5;
+  background-color: var(--primary);
   color: #ffffff;
-
   transform: scale(1.05);
 }
 
-/* Content */
-
+/* Content Container */
 .content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
   flex: 1;
-  min-width: 0;
+  min-width: 0; /* Enables text truncation inside flex child */
 }
 
+/* Branch Title */
 .name {
-  margin: 0;
-
-  color: #18181b;
-
-  font-size: 17px;
-  font-weight: 650;
-  line-height: 1.4;
-}
-
-.code {
-  display: inline-block;
-
-  margin-top: 5px;
-
-  color: #6366f1;
-
-  font-size: 13px;
+  font-size: 1rem;
   font-weight: 600;
-
-  letter-spacing: 0.04em;
-}
-
-.description {
-  margin: 7px 0 0;
-
-  color: #71717a;
-
-  font-size: 14px;
-  line-height: 1.5;
-
+  color: var(--text-main);
+  margin: 0;
+  line-height: 1.3;
+  /* Prevent long title overflow */
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color 0.2s ease;
+}
 
+.card:hover .name {
+  color: var(--primary);
+}
+
+/* Branch Code Badge */
+.code {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 0.15rem 0.5rem;
+  background-color: var(--bg-alt);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Optional Description & Semesters (if uncommented in JS) */
+.description {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
 .semesters {
-  display: inline-block;
-
-  margin-top: 10px;
-  padding: 5px 10px;
-
-  color: #52525b;
-
-  background: #f4f4f5;
-
-  border-radius: 7px;
-
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 500;
+  color: var(--text-light);
 }
 
-/* Arrow */
-
+/* Action Arrow Icon */
 .arrow {
-  flex-shrink: 0;
-
-  width: 38px;
-  height: 38px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
-  color: #71717a;
-
-  background: #f8f8fa;
-  border-radius: 10px;
-
-  transition:
-    background 0.25s ease,
-    color 0.25s ease,
-    transform 0.25s ease;
+  color: var(--text-light);
+  transition: all 0.2s ease;
+  margin-left: 0.25rem;
 }
 
 .card:hover .arrow {
-  color: #ffffff;
-  background: #4f46e5;
-
-  transform: translateX(3px);
+  color: var(--primary);
+  transform: translateX(4px);
 }
 
-/* Tablet */
+/* Link Tag Reset Fix */
+a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
 
-@media (max-width: 768px) {
+/* ================= MOBILE & TOUCH RESPONSIVENESS ================= */
+@media (max-width: 640px) {
   .card {
-    padding: 18px;
-    gap: 14px;
+    padding: 1rem;
+    gap: 0.875rem;
+    /* Touch target minimum spacing */
+    min-height: 72px; 
   }
 
   .iconWrapper {
-    width: 46px;
-    height: 46px;
-  }
-
-  .name {
-    font-size: 16px;
-  }
-}
-
-/* Mobile */
-
-@media (max-width: 480px) {
-  .card {
-    padding: 16px;
-    gap: 12px;
-  }
-
-  .iconWrapper {
-    width: 42px;
-    height: 42px;
-    border-radius: 11px;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
   }
 
   .iconWrapper svg {
@@ -210,20 +179,10 @@
   }
 
   .name {
-    font-size: 15px;
+    font-size: 0.95rem;
   }
 
-  .arrow {
-    width: 32px;
-    height: 32px;
-  }
-
-  .arrow svg {
-    width: 17px;
-    height: 17px;
-  }
-
-  .description {
-    font-size: 13px;
+  .code {
+    font-size: 0.7rem;
   }
 }

@@ -51,7 +51,7 @@ export default function ProgramDetails() {
             <h1>{program.name}</h1>
             <p>MRITS · JNTUH</p>
             <div className={styles.description}>
-              A structured collection of resources for this academic program.
+             {program.description}
             </div>
           </div>
         </section>
@@ -63,16 +63,16 @@ export default function ProgramDetails() {
           <div className={styles.overviewGrid}>
             <div>
               <small>Degree</small>
-              <strong>Bachelor of Technology</strong>
+              <strong>{program.name}</strong>
             </div>
             <div>
               <small>Duration</small>
-              <strong>4 Years</strong>
+              <strong>{program.duration_years}</strong>
             </div>
-            <div>
+            {/* <div>
               <small>Department</small>
               <strong>Computer Science & Engineering</strong>
-            </div>
+            </div> */}
           </div>
         </section>
         <section className={styles.semesters}>

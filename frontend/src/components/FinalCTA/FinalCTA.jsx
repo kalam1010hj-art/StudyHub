@@ -14,7 +14,7 @@ const FinalCTA = () => {
           Join thousands of engineering and degree students who prepare smarter and save time with StudyHub.
         </p>
         <div className={styles.buttonGroup}>
-          <Link to="/resources" className={styles.primaryBtn}>
+          <Link to="/resourceHub" className={styles.primaryBtn}>
             <span>Explore Resources</span>
             <ArrowRight size={18} />
           </Link>

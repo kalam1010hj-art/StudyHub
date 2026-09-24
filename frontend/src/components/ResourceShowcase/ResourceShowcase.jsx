@@ -16,7 +16,7 @@ const ResourceShowcase = () => {
               Recent top-rated notes, verified question papers, and syllabus solutions.
             </p>
           </div>
-          <Link to="/resources" className={styles.exploreLink}>
+          <Link to="/resourceHub" className={styles.exploreLink}>
             <span>Explore All Materials</span>
             <ChevronRight size={18} />
           </Link>

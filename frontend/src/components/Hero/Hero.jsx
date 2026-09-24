@@ -45,7 +45,7 @@ const Hero = () => {
             Find notes, question papers, assignments, and study material
             organized around your university, college, program, and semester.
           </p>
-
+{/* 
           <form className={styles.searchForm} onSubmit={handleSearch}>
             <div className={styles.inputWrapper}>
               <Search className={styles.searchIcon} size={20} />
@@ -61,15 +61,15 @@ const Hero = () => {
             <button type="submit" className={styles.searchButton}>
               Search
             </button>
-          </form>
+          </form> */}
 
           <div className={styles.ctaGroup}>
-            <Link to="/resources" className={styles.primaryCta}>
+            <Link to="/resourceHub" className={styles.primaryCta}>
               <span>Explore Resources</span>
               <ArrowRight size={18} />
             </Link>
-            <Link to="/programs" className={styles.secondaryCta}>
-              Browse Programs
+            <Link to="/colleges" className={styles.secondaryCta}>
+              Browse Colleges
             </Link>
           </div>
 

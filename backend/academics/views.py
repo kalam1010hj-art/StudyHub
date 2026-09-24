@@ -118,7 +118,7 @@ class DegreeView(APIView):
         if collegeId:
             try:
                 college = College.objects.get(id = collegeId)
-                degrees = college.degree.all()
+                degrees = Degree.objects.filter(college_id=collegeId)
                 degreeSerializer = DegreeSerializer(degrees,many = True)
                 collegeSerializer = CollegeSerializer(college)
                 return Response({
@@ -421,7 +421,7 @@ class SemesterDetailsView(APIView):
 
 class ResourceView(APIView):
 
-    permission_classes = [IsAdminForWrite]
+    permission_classes = [IsAuthenticatedForWrite]
 
     def get(self, request):
         subjectId = request.query_params.get("subjectId")
@@ -447,7 +447,8 @@ class ResourceView(APIView):
         serializer = ResourceSerializer(data=request.data)
 
         if serializer.is_valid():
-            serializer.save()
+            print(serializer.validated_data)
+            serializer.save(uploaded_by=request.user)
             return Response(serializer.data, status=201)
 
         return Response(serializer.errors, status=400)
@@ -564,3 +565,30 @@ class CollegeProgramDetailsView(APIView):
                 {"error": "College Program not found"},
                 status=404
             )
+
+# used to get all enity of universities,clg,degree,branch,sem and subject for uploading resource
+class Academic_directory(APIView):
+    def get(self,request):
+        universites = University.objects.all()
+        colleges    = College.objects.all()
+        programs    = Degree.objects.all()
+        branches    = Branch.objects.all()
+        semesters   = Semester.objects.all()
+        subjects    = Subject.objects.all()
+
+        universitySerializer = UniversitySerailizer(universites,many = True)
+        collegeSerializer    = CollegeSerializer(colleges,many = True)
+        programSerializer   = DegreeSerializer(programs,many = True)
+        brancheSerializer       = BranchSerializer(branches,many = True)
+        semesterSerializer   =SemesterSerializer(semesters,many =True)
+        subjectSerializer = SubjectSerializer(subjects,many = True)
+
+        return Response({
+            "universities":universitySerializer.data,
+            "colleges":collegeSerializer.data,
+            "programs":programSerializer.data,
+            "branches":brancheSerializer.data,
+            "semesters":semesterSerializer.data,
+            "subjects" :subjectSerializer.data
+        })
+

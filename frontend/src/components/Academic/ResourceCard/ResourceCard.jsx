@@ -1,13 +1,14 @@
-
 import {
   FileText,
-  Download,
   Eye,
+  Download,
   Bookmark,
   MoreVertical,
+  BookOpen,
 } from "lucide-react";
 
 import styles from "./ResourceCard.module.css";
+import { Link } from "react-router-dom";
 
 const ResourceCard = ({ resource }) => {
   const isQuestionPaper = resource.resource_type === "question_paper";
@@ -25,101 +26,122 @@ const ResourceCard = ({ resource }) => {
     link.href = resource.file;
     link.download = resource.title;
     document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
+
+  const uploader = resource.uploaded_by;
+
+  const uploaderName =
+    `${uploader?.first_name || ""} ${uploader?.last_name || ""}`.trim() ||
+    uploader?.username ||
+    "Unknown contributor";
 
   return (
     <article className={styles.card}>
-
-      {/* Resource icon */}
-      <div className={styles.iconWrapper}>
-        <FileText size={23} />
-      </div>
-
-      <div className={styles.content}>
-
-        {/* Top information */}
-        <div className={styles.top}>
-          <span className={styles.type}>
+      {/* Top Bar: Badges & Bookmark */}
+      <div className={styles.header}>
+        <div className={styles.badges}>
+          <span className={`${styles.badge} ${styles.typeBadge}`}>
+            <FileText size={13} />
             {resourceType}
           </span>
 
-          <span className={styles.fileId}>
-            #{resource.id}
-          </span>
-        </div>
-
-        {/* Title */}
-        <h3 className={styles.title}>
-          {resource.title}
-        </h3>
-
-        {/* Description */}
-        <p className={styles.description}>
-          {resource.description}
-        </p>
-
-        {/* Subject information */}
-        <div className={styles.subjectInfo}>
-          <span>{resource.subject?.code}</span>
-
-          <span className={styles.dot}>•</span>
-
-          <span>
-            {resource.subject?.name}
-          </span>
-
-          {resource.subject?.semester && (
-            <>
-              <span className={styles.dot}>•</span>
-
-              <span>
-                Semester {resource.subject.semester}
-              </span>
-            </>
+          {resource.subject?.code && (
+            <span className={`${styles.badge} ${styles.codeBadge}`}>
+              {resource.subject.code}
+            </span>
           )}
         </div>
 
-        {/* Actions */}
-        <div className={styles.actions}>
+        <div className={styles.quickActions}>
+          <button
+            className={styles.iconButton}
+            title="Bookmark resource"
+            aria-label="Bookmark"
+          >
+            <Bookmark size={16} />
+          </button>
+          <button
+            className={styles.iconButton}
+            title="More options"
+            aria-label="More"
+          >
+            <MoreVertical size={16} />
+          </button>
+        </div>
+      </div>
 
+      {/* Main Content */}
+      <div className={styles.body}>
+        <h3 className={styles.title} onClick={handleView}>
+          {resource.title}
+        </h3>
+
+        {resource.description && (
+          <p className={styles.description}>{resource.description}</p>
+        )}
+      </div>
+
+      {/* Subject Metadata Pills */}
+      {resource.subject && (
+        <div className={styles.subjectMeta}>
+          <span className={styles.metaChip}>
+            <BookOpen size={12} />
+            {resource.subject.name}
+          </span>
+          {resource.subject.semester && (
+            <span className={styles.metaChip}>
+              Sem {resource.subject.semester}
+            </span>
+          )}
+        </div>
+      )}
+
+      {/* Footer: Uploader & Primary Actions */}
+      
+      <div className={styles.footer}>
+        <Link to={`/publicProfile/${uploader.id}`}>
+        <div className={styles.uploader}>
+          {uploader?.avatar ? (
+            <img
+              src={uploader.avatar}
+              alt={uploaderName}
+              className={styles.avatar}
+            />
+          ) : (
+            <div className={styles.avatarFallback}>
+              {uploaderName.charAt(0).toUpperCase()}
+            </div>
+          )}
+          <div className={styles.uploaderDetails}>
+            <span className={styles.uploaderName}>{uploaderName}</span>
+            <span className={styles.uploaderRole}>Contributor</span>
+          </div>
+        </div>
+        </Link>
+        
+
+        <div className={styles.actionButtons}>
+          <button
+            className={styles.secondaryButton}
+            onClick={handleDownload}
+            title="Download file"
+          >
+            <Download size={15} />
+          </button>
           <button
             className={styles.primaryButton}
             onClick={handleView}
+            title="View resource"
           >
-            <Eye size={17} />
-            View
+            <Eye size={15} />
+            <span>View</span>
           </button>
-
-          {/* <button
-            className={styles.secondaryButton}
-            onClick={handleDownload}
-          >
-            <Download size={17} />
-            Download
-          </button> */}
-
-          <button
-            className={styles.iconButton}
-            title="Bookmark"
-          >
-            <Bookmark size={18} />
-          </button>
-
-          <button
-            className={styles.iconButton}
-            title="More"
-          >
-            <MoreVertical size={18} />
-          </button>
-
         </div>
-
       </div>
     </article>
   );
 };
 
 export default ResourceCard;
-

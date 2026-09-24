@@ -1,24 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
   Search,
   SlidersHorizontal,
-  FileText,
-  Download,
-  Eye,
-  Bookmark,
-  BookmarkCheck,
-  MoreVertical,
-  BookOpen,
-  ClipboardList,
-  Video,
-  FileQuestion,
   X,
+  Building2,
+  FolderX,
 } from "lucide-react";
+
 import getResoucresfiles from "../../services/resourceServices";
-import styles from "./Resources.module.css";
-import { useParams } from "react-router-dom";
 import ResourceCard from "../../components/Academic/ResourceCard/ResourceCard";
+import styles from "./Resources.module.css";
 
 const resourceTypes = [
   "All",
@@ -29,223 +22,239 @@ const resourceTypes = [
   "Videos",
 ];
 
-const resources = [
-  {
-    id: 1,
-    title: "Data Structures Complete Notes",
-    description:
-      "Complete unit-wise notes covering arrays, linked lists, stacks, queues, trees and graphs.",
-    type: "Notes",
-    subject: "Data Structures",
-    unit: "All Units",
-    size: "4.2 MB",
-    downloads: 1280,
-    updated: "2 days ago",
-    bookmarked: false,
-  },
-  {
-    id: 2,
-    title: "Data Structures Previous Question Papers",
-    description:
-      "Previous semester examination papers for Data Structures.",
-    type: "Question Papers",
-    subject: "Data Structures",
-    unit: "All Units",
-    size: "2.8 MB",
-    downloads: 940,
-    updated: "5 days ago",
-    bookmarked: true,
-  },
-  {
-    id: 3,
-    title: "DBMS Unit 1 Notes",
-    description:
-      "Introduction to databases, ER models, relational models and SQL fundamentals.",
-    type: "Notes",
-    subject: "Database Management Systems",
-    unit: "Unit 1",
-    size: "1.6 MB",
-    downloads: 760,
-    updated: "1 week ago",
-    bookmarked: false,
-  },
-  {
-    id: 4,
-    title: "Operating Systems Assignment",
-    description:
-      "Process management and CPU scheduling assignment questions.",
-    type: "Assignments",
-    subject: "Operating Systems",
-    unit: "Unit 2",
-    size: "850 KB",
-    downloads: 420,
-    updated: "1 week ago",
-    bookmarked: false,
-  },
+const unitOptions = [
+  "All Units",
+  "Unit 1",
+  "Unit 2",
+  "Unit 3",
+  "Unit 4",
+  "Unit 5",
 ];
 
-const getIcon = (type) => {
-  switch (type) {
-    case "Notes":
-      return <FileText size={20} />;
-    case "Question Papers":
-      return <FileQuestion size={20} />;
-    case "Books":
-      return <BookOpen size={20} />;
-    case "Assignments":
-      return <ClipboardList size={20} />;
-    case "Videos":
-      return <Video size={20} />;
-    default:
-      return <FileText size={20} />;
-  }
-};
+const sortOptions = [
+  "Recently Updated",
+  "Most Downloaded",
+  "Newest",
+  "Oldest",
+];
 
 const Resources = () => {
-    let {subjectId} = useParams()
- let [resources,setResources] = useState([])
- let [subject,setSubject] = useState({})
+  const { subjectId } = useParams();
+  const navigate = useNavigate();
+
+  // API Data States
+  const [resources, setResources] = useState([]);
+  const [subject, setSubject] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  // Filter & Search States
   const [activeType, setActiveType] = useState("All");
   const [search, setSearch] = useState("");
+  const [selectedUnit, setSelectedUnit] = useState("All Units");
+  const [sortBy, setSortBy] = useState("Recently Updated");
   const [showFilters, setShowFilters] = useState(false);
 
-  const filteredResources = resources.filter((resource) => {
-    const matchesType =
-      activeType === "All" || resource.type === activeType;
+  // Fetch Resources
+  useEffect(() => {
+    if (!subjectId) return;
 
-    const query = search.toLowerCase();
+    setLoading(true);
+    setError("");
 
-    const matchesSearch =
-      resource.title.toLowerCase().includes(query) ||
-      resource.subject.toLowerCase().includes(query) ||
-      resource.description.toLowerCase().includes(query);
-
-    return matchesType && matchesSearch;
-  });
-
-  useEffect(()=>{
     getResoucresfiles(subjectId)
-    .then((response)=>{
-        console.log(response.data)
-        setSubject(response.data.subject)
-        setResources(response.data.resources)
-    })
-    .catch((response)=>{
-        console.log(response)
-    })
-  },[])
+      .then((response) => {
+        const data = response.data || {};
+        setSubject(data.subject || null);
+        setResources(data.resources || []);
+      })
+      .catch((err) => {
+        console.error("Error fetching resources:", err);
+        setError(
+          err.response?.data?.detail ||
+            err.message ||
+            "Failed to load study resources. Please try again later."
+        );
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [subjectId]);
+
+  // Combined Filter and Sort Logic
+  const filteredResources = useMemo(() => {
+    if (!Array.isArray(resources)) return [];
+
+    let result = resources.filter((resource) => {
+      const matchesType =
+        activeType === "All" ||
+        resource.type?.toLowerCase() === activeType.toLowerCase();
+
+      const query = search.trim().toLowerCase();
+      const matchesSearch =
+        !query ||
+        resource.title?.toLowerCase().includes(query) ||
+        resource.subject?.toLowerCase().includes(query) ||
+        resource.description?.toLowerCase().includes(query) ||
+        resource.unit?.toLowerCase().includes(query);
+
+      const matchesUnit =
+        selectedUnit === "All Units" ||
+        resource.unit?.toLowerCase() === selectedUnit.toLowerCase();
+
+      return matchesType && matchesSearch && matchesUnit;
+    });
+
+    return result.sort((a, b) => {
+      if (sortBy === "Most Downloaded") {
+        return (b.downloads || 0) - (a.downloads || 0);
+      }
+      if (sortBy === "Newest") {
+        return (
+          new Date(b.createdAt || b.updated || 0) -
+          new Date(a.createdAt || a.updated || 0)
+        );
+      }
+      if (sortBy === "Oldest") {
+        return (
+          new Date(a.createdAt || a.updated || 0) -
+          new Date(b.createdAt || b.updated || 0)
+        );
+      }
+      return (
+        new Date(b.updatedAt || b.updated || 0) -
+        new Date(a.updatedAt || a.updated || 0)
+      );
+    });
+  }, [resources, activeType, search, selectedUnit, sortBy]);
+
+  const handleResetFilters = () => {
+    setSearch("");
+    setActiveType("All");
+    setSelectedUnit("All Units");
+    setSortBy("Recently Updated");
+  };
+
   return (
     <main className={styles.page}>
       <div className={styles.container}>
-
-        {/* Breadcrumb / Back */}
+        {/* Navigation & Breadcrumbs */}
         <div className={styles.navigation}>
-          <button className={styles.backButton}>
+          <button
+            className={styles.backButton}
+            onClick={() => navigate(-1)}
+            aria-label="Go back"
+          >
             <ArrowLeft size={18} />
             Back to Subject
           </button>
 
           <div className={styles.breadcrumb}>
-            <span>JNTUH</span>
+            <span>{subject?.collegeCode || subject?.college || "Institution"}</span>
             <span>/</span>
-            <span>CSE</span>
+            <span>{subject?.branchCode || subject?.branch || "Branch"}</span>
             <span>/</span>
-            <span>3-1</span>
+            <span>{subject?.semester ? `Semester ${subject.semester}` : "Academic"}</span>
             <span>/</span>
-            <strong>Data Structures</strong>
+            <strong>{subject?.name || "Subject Resources"}</strong>
           </div>
         </div>
 
-        {/* Header */}
+        {/* Page Header */}
         <section className={styles.header}>
           <div>
             <div className={styles.eyebrow}>
-              DATA STRUCTURES
+              {subject?.code || subject?.name || "ACADEMIC RESOURCES"}
             </div>
 
             <h1>Study Resources</h1>
 
             <p>
-              Find notes, question papers, assignments, books and
-              other learning materials for this subject.
+              Find notes, question papers, assignments, books, and other
+              learning materials curated for{" "}
+              <strong>{subject?.name || "this subject"}</strong>.
             </p>
           </div>
 
           <div className={styles.resourceCount}>
-            <strong>{resources.length}</strong>
+            <strong>{loading ? "..." : resources.length}</strong>
             <span>Resources</span>
           </div>
         </section>
 
-
-        {/* Search */}
+        {/* Toolbar & Search */}
         <section className={styles.toolbar}>
           <div className={styles.searchBox}>
-            <Search size={19} />
+            <Search size={19} className={styles.searchIcon} />
 
             <input
               type="text"
-              placeholder="Search resources..."
+              placeholder="Search by title, topic, or unit..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
 
             {search && (
-              <button onClick={() => setSearch("")}>
+              <button
+                className={styles.clearSearchButton}
+                onClick={() => setSearch("")}
+                aria-label="Clear search"
+              >
                 <X size={17} />
               </button>
             )}
           </div>
 
           <button
-            className={styles.filterButton}
-            onClick={() => setShowFilters(!showFilters)}
+            className={`${styles.filterButton} ${
+              showFilters ? styles.filterButtonActive : ""
+            }`}
+            onClick={() => setShowFilters((prev) => !prev)}
           >
             <SlidersHorizontal size={18} />
             Filters
           </button>
         </section>
 
-        {/* Filters */}
-        <div
-          className={`${styles.filterPanel} ${
-            showFilters ? styles.show : ""
-          }`}
-        >
+        {/* Filter Panel */}
+        <div className={`${styles.filterPanel} ${showFilters ? styles.show : ""}`}>
           <div className={styles.filterGroup}>
-            <label>Unit</label>
-
-            <select>
-              <option>All Units</option>
-              <option>Unit 1</option>
-              <option>Unit 2</option>
-              <option>Unit 3</option>
-              <option>Unit 4</option>
-              <option>Unit 5</option>
+            <label htmlFor="unit-select">Unit</label>
+            <select
+              id="unit-select"
+              value={selectedUnit}
+              onChange={(e) => setSelectedUnit(e.target.value)}
+            >
+              {unitOptions.map((unit) => (
+                <option key={unit} value={unit}>
+                  {unit}
+                </option>
+              ))}
             </select>
           </div>
 
           <div className={styles.filterGroup}>
-            <label>Sort By</label>
-
-            <select>
-              <option>Recently Updated</option>
-              <option>Most Downloaded</option>
-              <option>Newest</option>
-              <option>Oldest</option>
+            <label htmlFor="sort-select">Sort By</label>
+            <select
+              id="sort-select"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+            >
+              {sortOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
             </select>
           </div>
         </div>
 
-
-        {/* Resource Type Tabs */}
+        {/* Tabs */}
         <div className={styles.tabs}>
           {resourceTypes.map((type) => (
             <button
               key={type}
-              className={
-                activeType === type ? styles.activeTab : ""
-              }
+              className={activeType === type ? styles.activeTab : styles.tab}
               onClick={() => setActiveType(type)}
             >
               {type}
@@ -253,15 +262,69 @@ const Resources = () => {
           ))}
         </div>
 
-        
-        {resources.map((resource,index)=>{
-            return (<ResourceCard key={index} resource={resource}/>)
-        })}
+        {/* Loading State */}
+        {loading && (
+          <div className={styles.loadingList}>
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div key={index} className={styles.skeletonCard}>
+                <div className={styles.skeletonIcon} />
+                <div className={styles.skeletonContent}>
+                  <div className={styles.skeletonTitle} />
+                  <div className={styles.skeletonText} />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
+        {/* Error State */}
+        {!loading && error && (
+          <div className={styles.stateContainer}>
+            <div className={styles.stateIcon}>
+              <Building2 size={24} />
+            </div>
+            <h2>Unable to load resources</h2>
+            <p>{error}</p>
+          </div>
+        )}
+
+        {/* Resource List */}
+        {!loading && !error && filteredResources.length > 0 && (
+          <div className={styles.resourceGrid}>
+            {filteredResources.map((resource) => (
+              <ResourceCard
+                key={resource.id || resource._id}
+                resource={resource}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Empty State */}
+        {!loading && !error && filteredResources.length === 0 && (
+          <div className={styles.stateContainer}>
+            <div className={styles.stateIcon}>
+              <FolderX size={24} />
+            </div>
+            <h2>No resources found</h2>
+            <p>
+              {search || selectedUnit !== "All Units" || activeType !== "All"
+                ? "We couldn't find any resources matching your current filters."
+                : "No study materials have been uploaded for this subject yet."}
+            </p>
+            {(search || selectedUnit !== "All Units" || activeType !== "All") && (
+              <button
+                className={styles.resetButton}
+                onClick={handleResetFilters}
+              >
+                Reset all filters
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </main>
   );
 };
 
 export default Resources;
-

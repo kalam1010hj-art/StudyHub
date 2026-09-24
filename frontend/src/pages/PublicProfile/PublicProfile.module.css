@@ -1,0 +1,495 @@
+/* Custom CSS Variables scoped to module */
+.pageContainer {
+  --bg-page: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-hover: #f1f5f9;
+  --bg-badge-blue: #eff6ff;
+  --bg-badge-slate: #f1f5f9;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --border-subtle: #e2e8f0;
+  --border-interactive: #cbd5e1;
+  --accent-blue: #2563eb;
+  --accent-blue-hover: #1d4ed8;
+  --accent-amber: #d97706;
+  --accent-amber-bg: #fffbeb;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-full: 9999px;
+  --transition-fast: 0.15s ease-in-out;
+
+  background-color: var(--bg-page);
+  min-height: 100vh;
+  padding: clamp(1.5rem, 4vw, 3rem) clamp(1rem, 3vw, 2rem);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  color: var(--text-primary);
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+
+.mainContent {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Card Base Styling */
+.heroCard,
+.card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.25rem, 3vw, 2rem);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Section Headings */
+.cardHeading {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  margin: 0 0 1.25rem 0;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.sectionHeader .cardHeading {
+  margin-bottom: 0;
+}
+
+.countBadge {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background-color: var(--bg-hover);
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-subtle);
+}
+
+/* 1. Profile Hero Section */
+.heroBody {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.75rem;
+}
+
+.avatarContainer {
+  flex-shrink: 0;
+}
+
+.avatarImage {
+  width: 96px;
+  height: 96px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  border: 1px solid var(--border-subtle);
+}
+
+.avatarFallback {
+  width: 96px;
+  height: 96px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 1px var(--border-subtle);
+}
+
+.avatarInitials {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  user-select: none;
+}
+
+.identityDetails {
+  flex: 1;
+  min-width: 0; /* Prevents text overflow in flex layout */
+}
+
+.nameHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.userName {
+  font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.verifiedBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background-color: var(--bg-badge-blue);
+  color: var(--accent-blue);
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badgeIcon {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.subMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.handle {
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.dotDivider {
+  color: var(--border-interactive);
+}
+
+.roleTag {
+  font-weight: 500;
+}
+
+.bioText {
+  margin: 0.85rem 0 1.25rem 0;
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 680px;
+  word-break: break-word;
+}
+
+/* Social Links Group */
+.socialGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  flex-wrap: wrap;
+}
+
+.socialButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.85rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.socialButton:hover {
+  background-color: var(--bg-hover);
+  border-color: var(--border-interactive);
+  color: var(--text-primary);
+}
+
+.socialButton:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 2px;
+}
+
+.socialIcon {
+  width: 0.95rem;
+  height: 0.95rem;
+  color: var(--text-muted);
+}
+
+.socialButton:hover .socialIcon {
+  color: var(--text-primary);
+}
+
+/* Middle Layout Grid: Academic Info & Reputation */
+.middleGrid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 1.5rem;
+}
+
+/* 2. Academic Information Grid */
+.academicGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.academicItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: var(--radius-md);
+  background-color: var(--bg-hover);
+  border: 1px solid rgba(226, 232, 240, 0.6);
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  color: var(--accent-blue);
+  flex-shrink: 0;
+}
+
+.itemIcon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.itemContent {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.itemLabel {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.itemValue {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-top: 0.1rem;
+  word-break: break-word;
+}
+
+/* 3. Reputation Section */
+.reputationBox {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 2.25rem);
+  justify-content: space-between;
+}
+
+.reputationValueRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.starIconBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background-color: var(--accent-amber-bg);
+  border: 1px solid rgba(217, 119, 6, 0.2);
+  color: var(--accent-amber);
+  flex-shrink: 0;
+}
+
+.starIcon {
+  width: 1.35rem;
+  height: 1.35rem;
+  fill: currentColor;
+}
+
+.reputationStat {
+  display: flex;
+  flex-direction: column;
+}
+
+.reputationNumber {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.reputationLabel {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-top: 0.15rem;
+}
+
+.reputationDescription {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  margin: 1rem 0 0 0;
+  line-height: 1.5;
+}
+
+/* 5. Contributions Section */
+.contributionsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.contributionCard {
+  background-color: var(--bg-hover);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.75rem;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.contributionCard:hover {
+  border-color: var(--border-interactive);
+  background-color: #ffffff;
+}
+
+.contributionMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.typeBadge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background-color: var(--bg-card);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.subjectText {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.contributionTitle {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* RESPONSIVE DESIGN BREAKPOINTS */
+
+/* Tablet (Below 900px) */
+@media (max-width: 900px) {
+  .middleGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile (Below 768px) */
+@media (max-width: 768px) {
+  .heroBody {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .identityDetails {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .nameHeader {
+    justify-content: center;
+  }
+
+  .subMeta {
+    justify-content: center;
+  }
+
+  .bioText {
+    text-align: center;
+  }
+
+  .socialGroup {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .academicGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .reputationValueRow {
+    justify-content: center;
+  }
+
+  .reputationDescription {
+    text-align: center;
+  }
+}
+
+/* Small Mobile (Below 480px) */
+@media (max-width: 480px) {
+  .pageContainer {
+    padding: 1rem 0.75rem;
+  }
+
+  .heroCard,
+  .card {
+    padding: 1rem;
+  }
+
+  .socialGroup {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .socialButton {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .contributionsGrid {
+    grid-template-columns: 1fr;
+  }
+}

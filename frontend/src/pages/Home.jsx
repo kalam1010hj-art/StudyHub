@@ -19,9 +19,9 @@ function Home() {
   return (
     <main>
       <Hero />
-      <PlatformStats />
-      <ProgramExplorer />
-      <ResourceShowcase />
+      {/* <PlatformStats /> */}
+      {/* <ProgramExplorer /> */}
+      {/* <ResourceShowcase /> */}
       <HowItWorks />
       <AcademicDiscovery />
       <ContributorCTA />

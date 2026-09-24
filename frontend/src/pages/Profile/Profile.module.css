@@ -1,0 +1,629 @@
+/* ==========================================================================
+   STUDYHUB PROFILE MODULE STYLES
+   Design System: Linear / Vercel / SaaS Aesthetic
+   ========================================================================== */
+
+:root {
+  --ph-bg-page: #f8fafc;
+  --ph-bg-card: #ffffff;
+  --ph-text-primary: #0f172a;
+  --ph-text-secondary: #475569;
+  --ph-text-muted: #94a3b8;
+  --ph-border: #e2e8f0;
+  --ph-border-subtle: #f1f5f9;
+  
+  --ph-accent-blue: #2563eb;
+  --ph-accent-blue-hover: #1d4ed8;
+  --ph-accent-blue-light: #eff6ff;
+  
+  --ph-accent-green: #059669;
+  --ph-accent-green-light: #ecfdf5;
+  --ph-accent-green-border: #a7f3d0;
+
+  --ph-radius-card: 14px;
+  --ph-radius-sm: 8px;
+  --ph-radius-pill: 9999px;
+
+  --ph-shadow-subtle: 0 1px 2px 0 rgba(15, 23, 42, 0.03), 0 1px 3px 0 rgba(15, 23, 42, 0.02);
+  --ph-shadow-hover: 0 4px 12px -2px rgba(15, 23, 42, 0.05);
+}
+
+.pageWrapper {
+  min-height: 100vh;
+  background-color: var(--ph-bg-page);
+  color: var(--ph-text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  padding: 32px 16px 64px 16px;
+  line-height: 1.5;
+}
+
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ==========================================================================
+   HERO / HEADER SECTION
+   ========================================================================== */
+
+.heroCard {
+  position: relative;
+  background-color: var(--ph-bg-card);
+  border: 1px solid var(--ph-border);
+  border-radius: var(--ph-radius-card);
+  box-shadow: var(--ph-shadow-subtle);
+  overflow: hidden;
+}
+
+.heroBannerBackground {
+  height: 110px;
+  background: linear-gradient(135deg, #e0f2fe 0%, #e0e7ff 50%, #f1f5f9 100%);
+  border-bottom: 1px solid var(--ph-border-subtle);
+}
+
+.heroContent {
+  position: relative;
+  padding: 0 32px 32px 32px;
+  margin-top: -48px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 24px;
+  align-items: flex-end;
+}
+
+/* Avatar Styling */
+.avatarWrapper {
+  width: 110px;
+  height: 110px;
+  border-radius: var(--ph-radius-pill);
+  border: 4px solid var(--ph-bg-card);
+  background-color: var(--ph-bg-card);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.avatarImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatarFallback {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+/* Identity Details */
+.identityDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 12px;
+}
+
+.nameHeader {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.fullName {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--ph-text-primary);
+  letter-spacing: -0.02em;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.username {
+  font-size: 15px;
+  color: var(--ph-text-muted);
+  font-weight: 500;
+}
+
+.badgesRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.roleBadge {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background-color: var(--ph-text-primary);
+  color: #ffffff;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.verifiedBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ph-accent-green);
+  background-color: var(--ph-accent-green-light);
+  border: 1px solid var(--ph-accent-green-border);
+  padding: 2px 9px;
+  border-radius: var(--ph-radius-pill);
+}
+
+.verifiedIcon {
+  color: var(--ph-accent-green);
+}
+
+.academicMeta {
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.collegeTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ph-text-secondary);
+  margin: 0;
+}
+
+.metaIcon {
+  color: var(--ph-text-muted);
+  flex-shrink: 0;
+}
+
+.degreeSubtext {
+  font-size: 13px;
+  color: var(--ph-text-muted);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dotSeparator {
+  font-size: 10px;
+  color: var(--ph-border);
+}
+
+/* Action Buttons */
+.heroActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 4px;
+}
+
+.primaryButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--ph-text-primary);
+  color: #ffffff;
+  border: 1px solid transparent;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: var(--ph-radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: var(--ph-shadow-subtle);
+}
+
+.primaryButton:hover {
+  background-color: #1e293b;
+  transform: translateY(-1px);
+}
+
+.secondaryButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #ffffff;
+  color: var(--ph-text-secondary);
+  border: 1px solid var(--ph-border);
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: var(--ph-radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.secondaryButton:hover {
+  background-color: var(--ph-bg-page);
+  color: var(--ph-text-primary);
+  border-color: #cbd5e1;
+}
+
+/* ==========================================================================
+   MAIN LAYOUT GRID
+   ========================================================================== */
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 24px;
+  align-items: start;
+}
+
+.mainColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.sideColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Base Card Style */
+.card {
+  background-color: var(--ph-bg-card);
+  border: 1px solid var(--ph-border);
+  border-radius: var(--ph-radius-card);
+  box-shadow: var(--ph-shadow-subtle);
+  padding: 24px;
+  transition: border-color 0.2s ease;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--ph-border-subtle);
+}
+
+.cardHeader h2 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ph-text-primary);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.sectionIcon {
+  color: var(--ph-accent-blue);
+}
+
+/* Academic Grid */
+.academicGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.infoBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.infoLabel {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ph-text-muted);
+}
+
+.infoValue {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ph-text-primary);
+}
+
+/* About / Bio */
+.bioContainer {
+  background-color: var(--ph-bg-page);
+  border-radius: var(--ph-radius-sm);
+  padding: 16px;
+  border: 1px solid var(--ph-border-subtle);
+}
+
+.bioText {
+  margin: 0;
+  font-size: 14px;
+  color: var(--ph-text-secondary);
+  font-style: italic;
+  line-height: 1.6;
+}
+
+.bioEmptyText {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ph-text-muted);
+}
+
+/* Reputation */
+.reputationBody {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reputationScoreCard {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, var(--ph-accent-blue-light) 0%, #f0f9ff 100%);
+  border: 1px solid #dbeafe;
+  border-radius: var(--ph-radius-sm);
+  padding: 14px 18px;
+  width: fit-content;
+}
+
+.reputationBadgeIcon {
+  color: var(--ph-accent-blue);
+}
+
+.reputationScoreText {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.scoreNumber {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--ph-accent-blue);
+  line-height: 1;
+}
+
+.scoreLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ph-text-secondary);
+}
+
+.reputationDescription {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ph-text-muted);
+  line-height: 1.5;
+}
+
+/* Social & Web Links */
+.linksList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.socialLinkItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: var(--ph-radius-sm);
+  border: 1px solid var(--ph-border-subtle);
+  background-color: var(--ph-bg-card);
+  color: var(--ph-text-secondary);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.socialLinkItem:hover {
+  background-color: var(--ph-bg-page);
+  border-color: #cbd5e1;
+  color: var(--ph-accent-blue);
+}
+
+.linkLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.linkIcon {
+  color: var(--ph-text-muted);
+}
+
+.externalIcon {
+  color: var(--ph-text-muted);
+  opacity: 0.7;
+}
+
+.socialLinkItem:hover .linkIcon,
+.socialLinkItem:hover .externalIcon {
+  color: var(--ph-accent-blue);
+}
+
+/* Account Info */
+.accountList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.accountItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.accountIcon {
+  color: var(--ph-text-muted);
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.accountItemContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.accountLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ph-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.accountValue {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ph-text-primary);
+  word-break: break-all;
+}
+
+.accountValueMasked {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ph-text-secondary);
+  letter-spacing: 0.05em;
+  font-family: monospace;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN & ACCESSIBILITY
+   ========================================================================== */
+
+/* Tablet (max-width: 900px) */
+@media (max-width: 900px) {
+  .contentGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .heroContent {
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+      "avatar identity"
+      "actions actions";
+  }
+
+  .avatarWrapper {
+    grid-area: avatar;
+  }
+
+  .identityDetails {
+    grid-area: identity;
+  }
+
+  .heroActions {
+    grid-area: actions;
+    width: 100%;
+    margin-top: 8px;
+    padding-bottom: 0;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+/* Mobile (max-width: 640px) */
+@media (max-width: 640px) {
+  .pageWrapper {
+    padding: 12px 12px 48px 12px;
+  }
+
+  .heroBannerBackground {
+    height: 80px;
+  }
+
+  .heroContent {
+    margin-top: -40px;
+    padding: 0 16px 20px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .avatarWrapper {
+    width: 88px;
+    height: 88px;
+  }
+
+  .avatarFallback {
+    font-size: 26px;
+  }
+
+  .identityDetails {
+    align-items: center;
+    padding-top: 0;
+  }
+
+  .nameHeader {
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .fullName {
+    font-size: 22px;
+  }
+
+  .academicMeta {
+    align-items: center;
+  }
+
+  .collegeTitle {
+    text-align: center;
+  }
+
+  .degreeSubtext {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .academicGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .heroActions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    width: 100%;
+    min-height: 44px;
+  }
+}
+
+/* Reduced Motion for Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .primaryButton,
+  .secondaryButton,
+  .socialLinkItem,
+  .card {
+    transition: none !important;
+    transform: none !important;
+  }
+}

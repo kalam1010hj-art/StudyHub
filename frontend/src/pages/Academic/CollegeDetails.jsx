@@ -10,12 +10,28 @@ import { useParams } from "react-router-dom";
 
 export default function CollegeDetails() {
   let {collegeId} = useParams()
-  let [college,setCollege] = useState([])
+  let [college,setCollege] = useState({
+  university: "",
+  name: "",
+  code: "",
+  degree: "",
+  address: "",
+  city: "",
+  state: "",
+  pincode: "",
+  website: "",
+  email: "",
+  phone: "",
+  description: "",
+  afflicatedTo: "",
+  logo:false
+})
   let [degrees,setDegrees] =useState([])
   console.log("college page rendered")
   console.log(collegeId)
   useEffect(()=>{
     console.log("college details mounted")
+    
     getPrograms(collegeId)
     .then((response)=>{
       console.log(response.data)
@@ -33,20 +49,25 @@ export default function CollegeDetails() {
   return (
     <main className={styles.page}>
       <div className={styles.container}>
-        <Breadcrumbs items={[{ label: "JNTUH" }, { label: "MRITS" }]} />
+        <Breadcrumbs items={[{ label: `${college.afflicatedTo}` }, { label: `${college.code}` }]} />
         <AcademicPath active={1} />
         <section className={styles.header}>
-          <div className={styles.icon}>
+        
+          {
+            college.logo?
+            <img src = {college.logo} className={styles.collegeLogo}/>:
+            <div className={styles.icon}>
             <Building2 size={25} />
           </div>
+          }
           <div>
             <span>{college.name}</span>
             <h1>{college.name}</h1>
             <p>
-              <MapPin size={15} /> Mahbubnagar, Telangana
+              <MapPin size={15} /> {college.city}, {college.state}
             </p>
             <div className={styles.affiliated}>
-              <Link2 size={14} /> Affiliated with JNTUH
+              <Link2 size={14} /> Affiliated with {college.afflicatedTo}
             </div>
           </div>
         </section>
