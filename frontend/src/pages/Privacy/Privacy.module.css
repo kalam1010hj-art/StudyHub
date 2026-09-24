@@ -1,0 +1,13 @@
+.page { min-height: 70vh; background: #f8fafc; color: #0f172a; padding-bottom: 5rem; }
+.hero { max-width: 850px; margin: 0 auto; padding: 5rem 1.25rem 3rem; text-align: center; }
+.icon { width: 52px; height: 52px; margin: 0 auto 1rem; display: grid; place-items: center; border-radius: 15px; background: #eef2ff; color: #4f46e5; }
+.hero > span { color: #4f46e5; font-weight: 800; font-size: .78rem; text-transform: uppercase; letter-spacing: .12em; }
+.hero h1 { margin: .8rem 0; font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.05; letter-spacing: -.045em; }
+.hero p { color: #64748b; line-height: 1.7; max-width: 680px; margin: 0 auto 1rem; }
+.hero small { color: #94a3b8; }
+.card { max-width: 900px; margin: 0 auto; background: #fff; border: 1px solid #e2e8f0; border-radius: 20px; padding: clamp(1.25rem, 4vw, 2.5rem); box-shadow: 0 12px 35px rgba(15,23,42,.05); }
+.card section + section { border-top: 1px solid #f1f5f9; padding-top: 1.5rem; margin-top: 1.5rem; }
+.card h2 { font-size: 1.15rem; margin: 0 0 .55rem; }
+.card p { margin: 0; color: #64748b; line-height: 1.8; }
+.card a { color: #4f46e5; font-weight: 700; }
+@media (max-width: 640px) { .page { padding-bottom: 3rem; } .hero { padding: 3.5rem 1rem 2rem; } .card { margin: 0 1rem; border-radius: 16px; } }
