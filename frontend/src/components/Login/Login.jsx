@@ -142,7 +142,7 @@ export default function Login() {
           {/* Username Field */}
           <div className={styles.fieldGroup}>
             <label htmlFor="identifier" className={styles.label}>
-              Username
+              Username or email
             </label>
             <input
               id="identifier"
@@ -151,10 +151,10 @@ export default function Login() {
               onChange={(e) => {
                 setIdentifier(e.target.value);
                 if (fieldErrors.identifier)
-                  setFieldErrors({ ...fieldErrors, username: "" });
+                  setFieldErrors({ ...fieldErrors, identifier: "" });
               }}
               placeholder="Enter username or email"
-              className={`${styles.input} ${fieldErrors.username ? styles.inputError : ""}`}
+              className={`${styles.input} ${fieldErrors.identifier ? styles.inputError : ""}`}
               disabled={status === "submitting" || status === "success"}
               autoComplete="username"
               required
