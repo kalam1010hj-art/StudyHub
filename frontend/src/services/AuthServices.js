@@ -14,3 +14,16 @@ export function CreateAccount(formData){
   return axios.post(`${API_URL}/account/register`,formData)
 }
 
+
+
+function changePassword(passwordData) {
+  const token = localStorage.getItem("token");
+
+  return axios.post(`${API_URL}/account/change-password`, passwordData, {
+    headers: {
+      Authorization: `Token ${token}`,
+    },
+  });
+}
+
+export { changePassword };
