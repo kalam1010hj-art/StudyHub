@@ -19,6 +19,7 @@ import Profile from "./pages/Profile/Profile";
 import PublicProfile from "./pages/PublicProfile/PublicProfile";
 import UploadResource from "./pages/Academic/Upload";
 import EditProfile from "./pages/EditProfile/EditProfile";
+import MyUploads from "./pages/MyUploads/MyUploads";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 function App(){
   console.log("App component rendered")
@@ -60,6 +61,7 @@ function App(){
        <Route element={<ProtectedRoute/>}>
            <Route path="/profile" element = {<Profile/>}/>
            <Route path="/editProfile" element = {<EditProfile/>}/>
+           <Route path="/my-uploads" element = {<MyUploads/>}/>
        </Route>
 
         <Route path="/publicProfile/:userId" element = {<PublicProfile/>}/>
