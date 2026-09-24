@@ -26,7 +26,8 @@ const Navbar = () => {
   const location = useLocation();
 
   // Destructure auth data from AuthContext (including user details if available)
-  const { token, isAuthenticated, Logout, user } = useContext(AuthContext);
+  const { token, isAuthenticated, Logout, userdata } = useContext(AuthContext);
+  const user = userdata;
 
   const isAuth = Boolean(isAuthenticated && token);
 
@@ -194,6 +195,17 @@ const Navbar = () => {
                     <span>Uploaded Resources</span>
                   </Link>
 
+                  {user?.is_staff && (
+                    <Link
+                      to="/academic-management"
+                      className={styles.dropdownItem}
+                      onClick={() => setIsProfileOpen(false)}
+                    >
+                      <LayoutDashboard size={16} />
+                      <span>Academic Management</span>
+                    </Link>
+                  )}
+
                   <div className={styles.dropdownDivider} />
 
                   <button
@@ -318,6 +330,12 @@ const Navbar = () => {
                     <FileText size={16} />
                     <span>Uploaded Resources</span>
                   </Link>
+                  {user?.is_staff && (
+                    <Link to="/academic-management" className={styles.mobileProfileLink}>
+                      <LayoutDashboard size={16} />
+                      <span>Academic Management</span>
+                    </Link>
+                  )}
                   <button
                     type="button"
                     onClick={handleLogout}
