@@ -5,12 +5,14 @@ import {
   Bookmark,
   MoreVertical,
   BookOpen,
+  Trash2,
+  Loader2,
 } from "lucide-react";
 
 import styles from "./ResourceCard.module.css";
 import { Link } from "react-router-dom";
 
-const ResourceCard = ({ resource }) => {
+const ResourceCard = ({ resource, onDelete, deleting = false }) => {
   const isQuestionPaper = resource.resource_type === "question_paper";
 
   const resourceType = isQuestionPaper
@@ -143,10 +145,23 @@ const ResourceCard = ({ resource }) => {
             className={styles.secondaryButton}
             onClick={handleDownload}
             title="Download file"
-            disabled={!resource.file}
+            disabled={!resource.file || deleting}
           >
             <Download size={15} />
           </button>
+
+          {onDelete && (
+            <button
+              type="button"
+              className={styles.secondaryButton}
+              onClick={() => onDelete(resource)}
+              title="Delete resource"
+              aria-label="Delete resource"
+              disabled={deleting}
+            >
+              {deleting ? <Loader2 size={15} className={styles.spinner} /> : <Trash2 size={15} />}
+            </button>
+          )}
 
           <button
             type="button"
