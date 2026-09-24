@@ -508,6 +508,139 @@
    8. RESPONSIVE BREAKPOINTS
    ========================================================================== */
 
+
+
+/* ==========================================================================
+   9. FORM STATUS & REQUEST FEEDBACK
+   ========================================================================== */
+
+.statusArea {
+  width: min(1050px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0 auto 20px;
+}
+
+.successMessage,
+.errorMessage,
+.loadingState {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid;
+}
+
+.successMessage {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #065f46;
+}
+
+.errorMessage {
+  background: #fff7ed;
+  border-color: #fed7aa;
+  color: #9a3412;
+}
+
+.loadingState {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1e40af;
+}
+
+.successMessage > svg,
+.errorMessage > svg,
+.loadingState > svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.successMessage > div,
+.errorMessage > div,
+.loadingState > div {
+  min-width: 0;
+  flex: 1;
+}
+
+.successMessage strong,
+.errorMessage strong,
+.loadingState strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.successMessage span,
+.errorMessage span,
+.loadingState span {
+  display: block;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.dismissButton {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 20px;
+  line-height: 1;
+  padding: 0 2px;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.dismissButton:hover {
+  opacity: 1;
+}
+
+.retryInlineButton {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid currentColor;
+  background: transparent;
+  color: inherit;
+  padding: 7px 11px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.retryInlineButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.spin {
+  animation: uploadSpin 0.8s linear infinite;
+}
+
+@keyframes uploadSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.submitButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+  transform: none;
+  box-shadow: none;
+}
+
+.submitButton:disabled:hover {
+  background-color: #2563eb;
+  transform: none;
+  box-shadow: none;
+}
+
 @media (max-width: 820px) {
   .pathGrid,
   .resourceGrid {
