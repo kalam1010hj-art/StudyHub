@@ -58,3 +58,17 @@ function deleteAccount(password) {
 }
 
 export { deleteAccount };
+
+
+export function requestPasswordReset(email) {
+  return axios.post(`${API_URL}/account/forgot-password`, { email });
+}
+
+export function resetPassword(uid, token, password, confirm_password) {
+  return axios.post(`${API_URL}/account/reset-password`, {
+    uid,
+    token,
+    password,
+    confirm_password,
+  });
+}
