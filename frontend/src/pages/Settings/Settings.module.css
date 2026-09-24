@@ -263,11 +263,13 @@
 .formGrid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  gap: 16px;
+  width: 100%;
 }
 
 .form label,
 .deletePanel label {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 7px;
@@ -282,6 +284,9 @@
 
 .form input,
 .deletePanel input {
+  display: block;
+  box-sizing: border-box;
+  min-width: 0;
   height: 44px;
   width: 100%;
   border: 1px solid #dbe3ec;
@@ -395,6 +400,12 @@
   transition-duration: 0.01ms !important;
 }
 
+@media (max-width: 820px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 720px) {
   .page {
     padding: 32px 14px 64px;
@@ -413,10 +424,6 @@
   .primaryButton,
   .dangerButton {
     width: 100%;
-  }
-
-  .formGrid {
-    grid-template-columns: 1fr;
   }
 
   .settingRow {
