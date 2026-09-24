@@ -211,11 +211,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # EMAIL
 # =========================================================
 
-MAILERS = {
-    "default": {
-        "BACKEND": "django.core.mail.backends.console.EmailBackend",
-    },
-}
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 
 # =========================================================
