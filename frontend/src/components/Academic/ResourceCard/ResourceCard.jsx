@@ -101,8 +101,9 @@ const ResourceCard = ({ resource }) => {
       {/* Footer: Uploader & Primary Actions */}
       
       <div className={styles.footer}>
-        <Link to={`/publicProfile/${uploader.id}`}>
-        <div className={styles.uploader}>
+        {uploader?.id ? (
+          <Link to={`/publicProfile/${uploader.id}`}>
+            <div className={styles.uploader}>
           {uploader?.avatar ? (
             <img
               src={uploader.avatar}
@@ -117,10 +118,10 @@ const ResourceCard = ({ resource }) => {
           <div className={styles.uploaderDetails}>
             <span className={styles.uploaderName}>{uploaderName}</span>
             <span className={styles.uploaderRole}>Contributor</span>
-          </div>
-        </div>
-        </Link>
-        
+            </div>
+          </Link>
+        ) : (
+          <div className={styles.uploader}>
 
         <div className={styles.actionButtons}>
           <button
