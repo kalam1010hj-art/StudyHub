@@ -29,3 +29,15 @@ function getResourceDetails() {
   return axios.get(`${API_URL}/Hub/directory`)
   
 } export {getResourceDetails}
+
+function getMyUploads() {
+  const token = localStorage.getItem("token");
+
+  return axios.get(`${API_URL}/Hub/my-uploads`, {
+    headers: {
+      Authorization: `Token ${token}`,
+    },
+  });
+}
+
+export { getMyUploads };
