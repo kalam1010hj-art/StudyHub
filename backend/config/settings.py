@@ -214,7 +214,25 @@ MEDIA_URL = "/media/"
 # EMAIL
 # =========================================================
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# Console email is useful locally. On Render, set SMTP_* environment
+# variables to send real password-reset emails.
+EMAIL_HOST = os.getenv("SMTP_HOST")
+EMAIL_PORT = int(os.getenv("SMTP_PORT", "587"))
+EMAIL_HOST_USER = os.getenv("SMTP_USERNAME")
+EMAIL_HOST_PASSWORD = os.getenv("SMTP_PASSWORD")
+EMAIL_USE_TLS = os.getenv("SMTP_USE_TLS", "true").lower() == "true"
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER or "no-reply@studyhub.local")
+
+if EMAIL_HOST and EMAIL_HOST_USER and EMAIL_HOST_PASSWORD:
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# Public frontend URL used inside password-reset links.
+FRONTEND_URL = os.getenv(
+    "FRONTEND_URL",
+    "http://localhost:5173",
+)
 
 
 # =========================================================
