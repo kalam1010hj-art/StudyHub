@@ -23,6 +23,9 @@ import MyUploads from "./pages/MyUploads/MyUploads";
 import Settings from "./pages/Settings/Settings";
 import AcademicManagement from "./pages/AcademicManagement/AcademicManagement";
 import Contact from "./pages/Contact/Contact";
+import About from "./pages/About/About";
+import Privacy from "./pages/Privacy/Privacy";
+import Terms from "./pages/Terms/Terms";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 function App(){
@@ -71,6 +74,9 @@ function App(){
         </Route>
 
         <Route path="/publicProfile/:userId" element={<PublicProfile/>}/>
+        <Route path="/about" element={<About/>}/>
+        <Route path="/privacy" element={<Privacy/>}/>
+        <Route path="/terms" element={<Terms/>}/>
         <Route path="/contact" element={<Contact/>}/>
 
         {/* Catch-all 404 route for invalid paths */}
