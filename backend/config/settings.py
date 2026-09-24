@@ -33,6 +33,7 @@ DEBUG = os.environ.get("DEBUG")
 ALLOWED_HOSTS = [
       "localhost",
     "127.0.0.1",
+    "https://studyhub-6f6s.onrender.com"
 ]
 
 
