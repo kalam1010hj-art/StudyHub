@@ -19,17 +19,20 @@ const ResourceCard = ({ resource, onDelete, deleting = false }) => {
     ? "Question Paper"
     : resource.resource_type?.replaceAll("_", " ") || "Resource";
 
+  const fileUrl = resource.file_url || resource.file || null;
+  const fileName = resource.file_name || resource.file?.split("/").pop() || "studyhub-resource";
+
   const handleView = () => {
-    if (!resource.file) return;
-    window.open(resource.file, "_blank", "noopener,noreferrer");
+    if (!fileUrl) return;
+    window.open(fileUrl, "_blank", "noopener,noreferrer");
   };
 
   const handleDownload = () => {
-    if (!resource.file) return;
+    if (!fileUrl) return;
 
     const link = document.createElement("a");
-    link.href = resource.file;
-    link.download = resource.title || "studyhub-resource";
+    link.href = fileUrl;
+    link.download = fileName;
     link.rel = "noopener";
     document.body.appendChild(link);
     link.click();
@@ -145,7 +148,7 @@ const ResourceCard = ({ resource, onDelete, deleting = false }) => {
             className={styles.secondaryButton}
             onClick={handleDownload}
             title="Download file"
-            disabled={!resource.file || deleting}
+            disabled={!fileUrl || deleting}
           >
             <Download size={15} />
           </button>
@@ -168,7 +171,7 @@ const ResourceCard = ({ resource, onDelete, deleting = false }) => {
             className={styles.primaryButton}
             onClick={handleView}
             title="View resource"
-            disabled={!resource.file}
+            disabled={!fileUrl}
           >
             <Eye size={15} />
             <span>View</span>
