@@ -416,7 +416,7 @@ function UploadResource() {
             <span>Preparing universities, colleges, programs, semesters, and subjects…</span>
           </div>
         </div>
-      )
+      )}
       {/* =====================================================
         PAGE HEADER
        ===================================================== */}
