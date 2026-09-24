@@ -1,13 +1,11 @@
 import axios from "axios"
 const API_URL = import.meta.env.VITE_API_URL
 
-function AccountLogin(username,password){
-  return axios.post(`${API_URL}/account/login`,
-    {
-    username:username,
-    password:password
-  }
-)
+function AccountLogin(identifier, password){
+  return axios.post(`${API_URL}/account/login`, {
+    identifier,
+    password,
+  });
 } export default AccountLogin
 
 export function CreateAccount(formData){
