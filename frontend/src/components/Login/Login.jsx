@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 export default function Login() {
-  const [username, setUsername] = useState("");
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -31,8 +31,8 @@ export default function Login() {
 
   const validateForm = () => {
     const errors = {};
-    if (!username.trim()) {
-      errors.username = "Username is required";
+    if (!identifier.trim()) {
+      errors.identifier = "Username or email is required";
     }
 
     if (!password) {
@@ -57,7 +57,7 @@ export default function Login() {
     setStatus("submitting");
 
     // Passed `remember` state to AccountLogin
-    AccountLogin(username, password)
+    AccountLogin(identifier.trim(), password)
       .then((response) => {
         setStatus("success");
 
@@ -90,7 +90,7 @@ export default function Login() {
           message =
             error.response.data?.detail ||
             error.response.data?.non_field_errors?.[0] ||
-            "Invalid username or password.";
+            "Invalid username/email or password.";
         }
 
         setErrorMessage(message);
@@ -141,27 +141,27 @@ export default function Login() {
         <form onSubmit={handleSubmit} className={styles.form} noValidate>
           {/* Username Field */}
           <div className={styles.fieldGroup}>
-            <label htmlFor="username" className={styles.label}>
+            <label htmlFor="identifier" className={styles.label}>
               Username
             </label>
             <input
-              id="username"
+              id="identifier"
               type="text"
-              value={username}
+              value={identifier}
               onChange={(e) => {
-                setUsername(e.target.value);
-                if (fieldErrors.username)
+                setIdentifier(e.target.value);
+                if (fieldErrors.identifier)
                   setFieldErrors({ ...fieldErrors, username: "" });
               }}
-              placeholder="Enter your username"
+              placeholder="Enter username or email"
               className={`${styles.input} ${fieldErrors.username ? styles.inputError : ""}`}
               disabled={status === "submitting" || status === "success"}
               autoComplete="username"
               required
             />
-            {fieldErrors.username && (
+            {fieldErrors.identifier && (
               <span className={styles.fieldErrorText}>
-                {fieldErrors.username}
+                {fieldErrors.identifier}
               </span>
             )}
           </div>
