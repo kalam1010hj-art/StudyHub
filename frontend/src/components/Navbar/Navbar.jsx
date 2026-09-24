@@ -10,7 +10,8 @@ import {
   User, 
   ChevronDown, 
   FileText, 
-  LayoutDashboard 
+  LayoutDashboard, 
+  Mail 
 } from "lucide-react";
 import styles from "./Navbar.module.css";
 import { AuthContext } from "../../context/AuthProvider";
@@ -124,6 +125,16 @@ const Navbar = () => {
             }
           >
             Resources
+          </NavLink>
+          <NavLink
+            to="/contact"
+            className={({ isActive }) =>
+              isActive
+                ? `${styles.navLink} ${styles.activeLink}`
+                : styles.navLink
+            }
+          >
+            Contact
           </NavLink>
         </nav>
 
@@ -289,6 +300,18 @@ const Navbar = () => {
               }
             >
               Resources
+            </NavLink>
+
+            <NavLink
+              to="/contact"
+              className={({ isActive }) =>
+                isActive
+                  ? `${styles.mobileNavLink} ${styles.mobileActive}`
+                  : styles.mobileNavLink
+              }
+            >
+              <Mail size={16} />
+              <span>Contact</span>
             </NavLink>
 
             <NavLink
