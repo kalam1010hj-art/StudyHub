@@ -3,7 +3,8 @@ from rest_framework.response import Response
 from .models import  University,College,Degree,Branch,Subject,Semester,Resource,CollegeProgram
 from .serializers import UniversitySerailizer,CollegeSerializer,DegreeSerializer,BranchSerializer,SubjectSerializer,SemesterSerializer,ResourceSerializer,MyResourceSerializer,CollegeProgramSerializer
 from rest_framework.permissions import IsAdminUser,IsAuthenticated,IsAuthenticatedOrReadOnly,AllowAny
-from django.db.models import ProtectedError
+from django.db.models import ProtectedError, F, Value
+from django.db.models.functions import Greatest
 from .permissions import IsAdminForWrite,IsSuperuserForWrite,IsAuthenticatedForWrite
 # Create your views here.
 
@@ -464,7 +465,11 @@ class ResourceView(APIView):
 
         if serializer.is_valid():
             print(serializer.validated_data)
-            serializer.save(uploaded_by=request.user)
+            resource = serializer.save(uploaded_by=request.user)
+            # Reward the contributor only after a successful resource creation.
+            type(request.user).objects.filter(pk=request.user.pk).update(
+                reputation_points=F("reputation_points") + 10
+            )
             return Response(serializer.data, status=201)
 
         return Response(serializer.errors, status=400)
@@ -542,6 +547,11 @@ class ResourceDetailsView(APIView):
                 )
 
             resource.delete()
+            # Remove the upload reward when the contributor deletes their resource.
+            # Never allow reputation to fall below zero.
+            type(request.user).objects.filter(pk=request.user.pk).update(
+                reputation_points=Greatest(F("reputation_points") - 10, Value(0))
+            )
             return Response(status=204)
 
         except Resource.DoesNotExist:
