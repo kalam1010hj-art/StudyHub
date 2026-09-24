@@ -14,7 +14,7 @@ import College from "./pages/Academic/College";
 import ResourceHub from "./pages/Academic/ResourceHub";
 import NotFound from "./pages/NotFound/NotFound";
 import Register from "./pages/Register/Register";
-import Login from "./components/Login/Login";
+import Login from "./components/Login/Login";\nimport ForgotPassword from "./pages/ForgotPassword/ForgotPassword";\nimport ResetPassword from "./pages/ResetPassword/ResetPassword";
 import Profile from "./pages/Profile/Profile";
 import PublicProfile from "./pages/PublicProfile/PublicProfile";
 import UploadResource from "./pages/Academic/Upload";
@@ -62,7 +62,7 @@ function App(){
 
         {/* Authentication and user Profile Routes */}
         <Route path="/login" element={<Login/>}/>
-        <Route path="/register" element={<Register/>}/>
+        <Route path="/register" element={<Register/>}/>\n        <Route path="/forgot-password" element={<ForgotPassword/>}/>\n        <Route path="/reset-password/:uid/:token" element={<ResetPassword/>}/>
 
         {/* protected Routes */}
         <Route element={<ProtectedRoute/>}>
