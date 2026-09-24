@@ -43,7 +43,13 @@ const Register = () => {
     e.preventDefault();
     setError("");
 
-    // Client-side validations
+    const username = formData.username.trim();
+
+    if (!username) {
+      setError("Please enter a username.");
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match.");
       return;
@@ -54,55 +60,41 @@ const Register = () => {
       return;
     }
 
-    // if (!formData.agreeToTerms) {
-    //   setError("Please accept the Terms & Conditions to proceed.");
-    //   return;
-    // }
-
     setLoading(true);
 
     try {
-     
-      const data = {
-      username: formData.username,
-      password: formData.password,
-    };
-      CreateAccount(data)
-      .then((response)=>{
-         setFormData({
-            username: "",
-            password: "",
-            confirmPassword: "",
-         })
-         setLoading(false)
-       navigate("/login");
+      await CreateAccount({
+        username,
+        password: formData.password,
+      });
 
-      })
-      
-      .catch((response)=>{
-        console.log("catch is excecuted: ",response.status)
+      setFormData({
+        username: "",
+        password: "",
+        confirmPassword: "",
+      });
 
-        if(response.status == 400){
-          setError("Username already exits!")
-          console.log("error is setted")
-        }
-        //  setFormData(
-        //     username:"",
-        //     password:"",
-        //     confirmPassword:""
-        // )
-       
-      })
-      .finally(()=>{
-        setLoading(false)
-      })
-      // Simulate API call success
-      // navigate("/login");
+      navigate("/login", {
+        replace: true,
+        state: { message: "Account created successfully. Please log in." },
+      });
+    } catch (err) {
+      const data = err?.response?.data;
+      const errors = data?.error || data?.errors;
+
+      if (errors && typeof errors === "object") {
+        const messages = Object.values(errors).flat().filter(Boolean);
+        setError(messages.join(" ") || "Unable to create your account.");
+      } else {
+        setError(
+          data?.detail ||
+          data?.message ||
+          "Unable to create your account. Please try again."
+        );
+      }
+    } finally {
+      setLoading(false);
     }
-     catch (err) {
-      setError(err.response?.data?.message || "Registration failed. Please try again.");
-    } 
-   
   };
 
   return (
