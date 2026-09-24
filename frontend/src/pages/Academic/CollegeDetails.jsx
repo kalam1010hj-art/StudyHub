@@ -6,6 +6,7 @@ import styles from "./CollegeDetails.module.css";
 import { useEffect, useState } from "react";
 import { getPrograms } from "../../services/collegeServices";
 import { useParams } from "react-router-dom";
+import InstitutionRequestCTA from "../../components/InstitutionRequestCTA/InstitutionRequestCTA";
 
 export default function CollegeDetails() {
   let {collegeId} = useParams()
@@ -83,6 +84,7 @@ export default function CollegeDetails() {
           </div>
           {degrees.length < 1 &&
           <p className={styles.empty}>No programs present in this college.</p> }
+          <InstitutionRequestCTA />
         </section>
       </div>
     </main>
