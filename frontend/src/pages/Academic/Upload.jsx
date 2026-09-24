@@ -190,6 +190,17 @@ function UploadResource() {
     return fallback;
   };
 
+  const showSubmitError = (message) => {
+    setSubmitSuccess("");
+    setSubmitError(message);
+
+    // Bring the error banner into view so validation/API errors are never hidden
+    // below the upload form, especially on mobile.
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  };
+
   const resetResourceForm = () => {
     setForm({
       university: "",
@@ -220,57 +231,57 @@ function UploadResource() {
     setSubmitSuccess("");
 
     if (!form.university) {
-      setSubmitError("Please select a university.");
+      showSubmitError("Please select a university.");
       return;
     }
 
     if (!form.college) {
-      setSubmitError("Please select a college.");
+      showSubmitError("Please select a college.");
       return;
     }
 
     if (!form.program) {
-      setSubmitError("Please select a program.");
+      showSubmitError("Please select a program.");
       return;
     }
 
     if (!form.branch) {
-      setSubmitError("Please select a branch.");
+      showSubmitError("Please select a branch.");
       return;
     }
 
     if (!form.semester) {
-      setSubmitError("Please select a semester.");
+      showSubmitError("Please select a semester.");
       return;
     }
 
     if (!form.subject) {
-      setSubmitError("Please select a subject.");
+      showSubmitError("Please select a subject.");
       return;
     }
 
     if (!resourceForm.title.trim()) {
-      setSubmitError("Please enter a resource title.");
+      showSubmitError("Please enter a resource title.");
       return;
     }
 
     if (!resourceForm.description.trim()) {
-      setSubmitError("Please enter a description.");
+      showSubmitError("Please enter a description.");
       return;
     }
 
     if (!resourceForm.resource_type) {
-      setSubmitError("Please select a resource type.");
+      showSubmitError("Please select a resource type.");
       return;
     }
 
     if (!resourceForm.file) {
-      setSubmitError("Please select a file to upload.");
+      showSubmitError("Please select a file to upload.");
       return;
     }
 
     if (!userdata) {
-      setSubmitError("Your user information is not available. Please sign in again.");
+      showSubmitError("Your user information is not available. Please sign in again.");
       return;
     }
 
@@ -301,7 +312,7 @@ function UploadResource() {
       console.error("Status:", error.response?.status);
       console.error("Data:", error.response?.data);
 
-      setSubmitError(
+      showSubmitError(
         getApiErrorMessage(
           error,
           "We couldn't upload your resource. Please check the form and try again."
@@ -334,6 +345,9 @@ function UploadResource() {
           "Unable to load the academic directory. Please try again."
         )
       );
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
     } finally {
       setIsLoadingDirectory(false);
     }
