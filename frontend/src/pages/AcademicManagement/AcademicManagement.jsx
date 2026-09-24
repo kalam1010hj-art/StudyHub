@@ -77,6 +77,7 @@ const AcademicManagement = () => {
   const [activeTab, setActiveTab] = useState("branches");
 
   const [degrees, setDegrees] = useState([]);
+  const [colleges, setColleges] = useState([]);
   const [branches, setBranches] = useState([]);
   const [semesters, setSemesters] = useState([]);
   const [subjects, setSubjects] = useState([]);
@@ -126,6 +127,7 @@ const AcademicManagement = () => {
       const data = response.data || {};
 
       setDegrees(Array.isArray(data.programs) ? data.programs : []);
+      setColleges(Array.isArray(data.colleges) ? data.colleges : []);
       setBranches(Array.isArray(data.branches) ? data.branches : []);
       setSemesters(Array.isArray(data.semesters) ? data.semesters : []);
       setSubjects(Array.isArray(data.subjects) ? data.subjects : []);
@@ -150,6 +152,11 @@ const AcademicManagement = () => {
   const degreeMap = useMemo(
     () => new Map(degrees.map((degree) => [degree.id, degree])),
     [degrees]
+  );
+
+  const collegeMap = useMemo(
+    () => new Map(colleges.map((college) => [college.id, college])),
+    [colleges]
   );
 
   const branchMap = useMemo(
