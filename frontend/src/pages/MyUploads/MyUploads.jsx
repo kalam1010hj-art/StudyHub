@@ -236,7 +236,12 @@ const MyUploads = () => {
         {!loading && !error && visibleUploads.length > 0 && (
           <section className={styles.grid}>
             {visibleUploads.map((resource) => (
-              <ResourceCard\n                key={resource.id}\n                resource={resource}\n                onDelete={handleDelete}\n                deleting={deletingId === resource.id}\n              />
+              <ResourceCard
+                key={resource.id}
+                resource={resource}
+                onDelete={handleDelete}
+                deleting={deletingId === resource.id}
+              />
             ))}
           </section>
         )}
