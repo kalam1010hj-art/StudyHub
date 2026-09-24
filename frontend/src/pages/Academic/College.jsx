@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Search, Building2, X } from "lucide-react";
 
 import CollegeCard from "../../components/Academic/CollegeCard/CollegeCard";
+import InstitutionRequestCTA from "../../components/InstitutionRequestCTA/InstitutionRequestCTA";
 import styles from "./College.module.css";
 
 import getColleges from "../../services/collegeServices";
@@ -173,6 +174,7 @@ export default function College() {
             </button>
           </div>
         )}
+        <InstitutionRequestCTA />
       </div>
     </main>
   );
