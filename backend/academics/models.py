@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-from cloudinary_storage.storage import RawMediaCloudinaryStorage
+from cloudinary_storage.storage import RawMediaCloudinaryStorage, MediaCloudinaryStorage
 
 # Create your models here.
 class University(models.Model):
@@ -25,6 +25,7 @@ class University(models.Model):
 
     logo = models.ImageField(
         upload_to="universities/logos/",
+        storage=MediaCloudinaryStorage(),
         blank=True,
         null=True
     )
@@ -59,6 +60,7 @@ class College(models.Model):
     afflicatedTo = models.CharField(max_length=20,blank=True)
     logo = models.ImageField(
             upload_to="college/logos/",
+            storage=MediaCloudinaryStorage(),
             blank=True,
             null=True
         )
