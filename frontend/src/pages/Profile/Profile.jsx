@@ -201,6 +201,13 @@ export default function Profile() {
 
             {/* Actions */}
             <div className={styles.heroActions}>
+            <Link to="/my-uploads">
+              <button className={styles.secondaryButton} type="button">
+                <BookOpen size={15} />
+                <span>My Uploads</span>
+              </button>
+            </Link>
+
             <Link to="/editProfile">
               <button className={styles.primaryButton} type="button">
                 <Pencil size={15} />
