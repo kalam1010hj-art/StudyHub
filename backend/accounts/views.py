@@ -15,15 +15,24 @@ class LoginView(APIView):
     def post(self,request):
         serializer = LoginSerializer(data = request.data)
         if serializer.is_valid():
-            user = authenticate(**serializer.validated_data)
+            identifier = serializer.validated_data["identifier"].strip()
+            password = serializer.validated_data["password"]
+
+            username = identifier
+            if "@" in identifier:
+                account = User.objects.filter(email__iexact=identifier, is_active=True).first()
+                if account:
+                    username = account.username
+
+            user = authenticate(username=username, password=password)
             if user:
                 token,created = Token.objects.get_or_create(user = user)
                 user = User.objects.get(id = user.id)
                 userSerializer = UserInfoSerializer(user)
                 return Response({"token":token.key,"userprofile":userSerializer.data})
             else:
-                return Response({"error":"Invalid credintials"},status = 400)
-        return Response({"error":"Invalid credintials"},status = 400)
+                return Response({"error":"Invalid username/email or password."},status = 400)
+        return Response({"error":"Invalid username/email or password."},status = 400)
             
 
 class RegisterView(APIView):
@@ -31,8 +40,13 @@ class RegisterView(APIView):
         serializer = RegisterSerializer(data = request.data)
         
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data,status=201)
+            user = serializer.save()
+            return Response({
+                "id": user.id,
+                "username": user.username,
+                "email": user.email,
+                "message": "Account created successfully.",
+            }, status=201)
         return Response({"error":serializer.errors},status=400)
 
 #  This view is used to provide user information for profile page
@@ -175,13 +189,10 @@ class ForgotPasswordView(APIView):
         from django.utils.http import urlsafe_base64_encode
         from django.utils.encoding import force_bytes
 
-        email = (request.data.get("email") or "").strip()
+        email = (request.data.get("email") or "").strip().lower()
 
         if not email:
-            return Response(
-                {"detail": "If an account exists for that email, a reset link has been sent."},
-                status=200,
-            )
+            return Response({"detail": "Please enter your email address."}, status=400)
 
         users = User.objects.filter(email__iexact=email, is_active=True)
 
