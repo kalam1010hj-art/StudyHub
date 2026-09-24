@@ -12,6 +12,7 @@ import AcademicPath from "../../components/Academic/AcademicPath/AcademicPath";
 import AcademicSearch from "../../components/Academic/AcademicSearch/AcademicSearch";
 import CollegeCard from "../../components/Academic/CollegeCard/CollegeCard";
 import Loading from "../../components/Loading/Loading";
+import InstitutionRequestCTA from "../../components/InstitutionRequestCTA/InstitutionRequestCTA";
 
 import styles from "./UniversityDetails.module.css";
 
@@ -266,6 +267,8 @@ export default function UniversityDetails() {
               </p>
             )}
           </section>
+
+          <InstitutionRequestCTA />
 
         </div>
       )}
