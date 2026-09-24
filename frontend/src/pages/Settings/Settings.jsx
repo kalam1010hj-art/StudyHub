@@ -7,10 +7,7 @@ import {
   ChevronRight,
   KeyRound,
   LogOut,
-  Mail,
-  Moon,
   Shield,
-  Sun,
   Trash2,
   User,
 } from "lucide-react";
