@@ -1,6 +1,7 @@
 import { ArrowLeft, BookOpen, GraduationCap, Layers3 } from "lucide-react";
 import styles from "./BranchDetails.module.css";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getSemesters } from "../../services/collegeServices";
 import { useParams } from "react-router-dom";
 import SemesterCard from "../../components/Academic/SemesterCard/SemesterCard";
@@ -11,6 +12,8 @@ function BranchDetails() {
   })
   let [semesters,setSemester] = useState([])
   let {branchId} = useParams()
+  const navigate = useNavigate();
+
   useEffect(()=>{
     getSemesters(branchId)
     .then((response)=>{
@@ -21,7 +24,7 @@ function BranchDetails() {
     .catch((response)=>{
       console.log(response)
     })
-  },[])
+  },[branchId])
 
   if (!branch) {
     return (
@@ -35,7 +38,7 @@ function BranchDetails() {
           We couldn't find the branch you're looking for.
         </p>
 
-        <button  className={styles.backButton}>
+        <button type="button" className={styles.backButton} onClick={() => navigate(-1)}>
           <ArrowLeft size={18} />
           Go Back
         </button>
@@ -47,7 +50,7 @@ function BranchDetails() {
   return (
     <section className={styles.container}>
       {/* Back */}
-      <button className={styles.backLink} >
+      <button type="button" className={styles.backLink} onClick={() => navigate(-1)}>
         <ArrowLeft size={18} />
         Back to branches
       </button>
