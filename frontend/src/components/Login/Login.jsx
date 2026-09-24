@@ -173,6 +173,7 @@ export default function Login() {
                 Password
               </label>
               <Link to="/forgot-password" className={styles.forgotLink}>
+                {/* Password recovery */}
                 Forgot password?
               </Link>
             </div>
