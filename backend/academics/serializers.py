@@ -47,6 +47,15 @@ class ResourceSerializer(serializers.ModelSerializer):
         fields = "__all__"
      
 
+class MyResourceSerializer(serializers.ModelSerializer):
+    uploaded_by = UserSerializer(read_only=True)
+    subject = SubjectSerializer(read_only=True)
+
+    class Meta:
+        model = Resource
+        fields = "__all__"
+
+
 class CollegeProgramSerializer(serializers.ModelSerializer):
     class Meta:
         model = CollegeProgram
