@@ -84,6 +84,7 @@ export default function PublicProfile() {
   const {userId} = useParams()
   const [user,setUSer] = useState({})
   const [isLoading,setLoading] = useState(true)
+  const [loadError, setLoadError] = useState("")
   const fullName = `${user.first_name} ${user.last_name}`.trim();
   const initials = getInitials(user.first_name, user.last_name);
   const formattedReputation = user.reputation_points
@@ -93,19 +94,41 @@ export default function PublicProfile() {
  
   console.log("public profile rendered")
   useEffect(()=>{
+  setLoadError("")
   getPublicProfile(userId)
   .then((response)=>{
-    console.log(response.data)
     setUSer(response.data)
-    setLoading(false)
   })
-  .catch((response)=>{
-    console.log(response)
+  .catch((error)=>{
+    console.log(error)
+    setLoadError(
+      error?.response?.data?.error ||
+      error?.response?.data?.detail ||
+      "This profile could not be loaded."
+    )
+  })
+  .finally(()=>{
     setLoading(false)
   })
   },[userId])  
   if (isLoading){
     return <Loading/>
+  }
+
+  if (loadError){
+    return (
+      <div className={styles.pageContainer}>
+        <main className={styles.mainContent}>
+          <section className={styles.emptyUploads}>
+            <div className={styles.emptyUploadsIcon} aria-hidden="true">
+              <FileText size={24} />
+            </div>
+            <h3>Profile unavailable</h3>
+            <p>{loadError}</p>
+          </section>
+        </main>
+      </div>
+    )
   }
   return (
     <div className={styles.pageContainer}>
