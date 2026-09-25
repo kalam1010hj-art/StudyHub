@@ -33,13 +33,9 @@ export default function ProgramDetails() {
   return (
     <main className={styles.page}>
       <div className={styles.container}>
-        <Breadcrumbs
-          items={[
-            { label: "JNTUH" },
-            { label: "MRITS" },
-            { label: "B.Tech CSE" },
-          ]}
-        />
+        {program.breadcrumb?.length > 0 && (
+          <Breadcrumbs items={program.breadcrumb} />
+        )}
         <AcademicPath active={2} />
         <section className={styles.hero}>
           <div className={styles.icon}>
@@ -48,7 +44,7 @@ export default function ProgramDetails() {
           <div>
             <span>{program.code}</span>
             <h1>{program.name}</h1>
-            <p>MRITS · JNTUH</p>
+            <p>{program.college?.name || "Academic program"}</p>
             <div className={styles.description}>
              {program.description}
             </div>
