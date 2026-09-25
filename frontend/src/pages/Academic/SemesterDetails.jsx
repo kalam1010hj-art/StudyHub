@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import styles from "./SemesterDetails.module.css";
 import { getSubjects } from "../../services/collegeServices";
+import Breadcrumbs from "../../components/Academic/Breadcrumbs/Breadcrumbs";
 
 function SemesterDetails() {
   const [semester, setSemester] = useState(null);
@@ -79,6 +80,8 @@ function SemesterDetails() {
   return (
     <main className={styles.page}>
       <div className={styles.container}>
+        {semester.breadcrumb?.length > 0 && <Breadcrumbs items={semester.breadcrumb} />}
+
         <button type="button" className={styles.backLink} onClick={() => navigate(-1)}>
           <ArrowLeft size={17} />
           Back to branch
