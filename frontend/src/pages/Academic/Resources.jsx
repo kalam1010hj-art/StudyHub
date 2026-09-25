@@ -12,6 +12,7 @@ import {
 import getResoucresfiles from "../../services/resourceServices";
 import ResourceCard from "../../components/Academic/ResourceCard/ResourceCard";
 import styles from "./Resources.module.css";
+import Breadcrumbs from "../../components/Academic/Breadcrumbs/Breadcrumbs";
 
 const resourceTypes = [
   "All",
@@ -149,15 +150,9 @@ const Resources = () => {
             Back to Subject
           </button>
 
-          <div className={styles.breadcrumb}>
-            <span>{subject?.collegeCode || subject?.college || "Institution"}</span>
-            <span>/</span>
-            <span>{subject?.branchCode || subject?.branch || "Branch"}</span>
-            <span>/</span>
-            <span>{subject?.semester ? `Semester ${subject.semester}` : "Academic"}</span>
-            <span>/</span>
-            <strong>{subject?.name || "Subject Resources"}</strong>
-          </div>
+          {subject?.breadcrumb?.length > 0 && (
+            <Breadcrumbs items={subject.breadcrumb} />
+          )}
         </div>
 
         {/* Page Header */}
