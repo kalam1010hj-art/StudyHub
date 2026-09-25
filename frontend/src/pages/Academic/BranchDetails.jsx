@@ -2,6 +2,7 @@ import { ArrowLeft, BookOpen, GraduationCap, Layers3 } from "lucide-react";
 import styles from "./BranchDetails.module.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Breadcrumbs from "../../components/Academic/Breadcrumbs/Breadcrumbs";
 import { getSemesters } from "../../services/collegeServices";
 import { useParams } from "react-router-dom";
 import SemesterCard from "../../components/Academic/SemesterCard/SemesterCard";
@@ -49,6 +50,8 @@ function BranchDetails() {
 
   return (
     <section className={styles.container}>
+      {branch.breadcrumb?.length > 0 && <Breadcrumbs items={branch.breadcrumb} />}
+
       {/* Back */}
       <button type="button" className={styles.backLink} onClick={() => navigate(-1)}>
         <ArrowLeft size={18} />
