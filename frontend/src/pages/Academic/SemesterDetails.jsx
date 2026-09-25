@@ -1,98 +1,98 @@
-
-import {
-  ArrowLeft,
-  ArrowRight,
-  BookOpen,
-  GraduationCap,
-  Layers3,
-  Library,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, GraduationCap, Layers3, Library } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 import styles from "./SemesterDetails.module.css";
-import { useEffect, useState } from "react";
 import { getSubjects } from "../../services/collegeServices";
-import { useNavigate, useParams } from "react-router-dom";
-import SubjectCard from "../../components/Academic/SubjectCard/SubjectCard";
 
 function SemesterDetails() {
-  let [semester,setSemester] =useState({})
-  let [subjects,setSubjects] = useState([])
-  let {semesterId} = useParams()
+  const [semester, setSemester] = useState(null);
+  const [subjects, setSubjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const { semesterId } = useParams();
   const navigate = useNavigate();
-  
 
-  useEffect(()=>{
-  getSubjects(semesterId)
-  .then((response)=>{
-    console.log(response.data)
-    setSemester(response.data.semester)
-    setSubjects(response.data.subject)
-  })
-  .catch((response)=>{
-    console.log(response)
-  })
-  },[semesterId])
-  if (!semester) {
+  useEffect(() => {
+    let active = true;
+
+    setLoading(true);
+    setError(false);
+
+    getSubjects(semesterId)
+      .then((response) => {
+        if (!active) return;
+        setSemester(response.data?.semester ?? null);
+        setSubjects(Array.isArray(response.data?.subject) ? response.data.subject : []);
+      })
+      .catch(() => {
+        if (!active) return;
+        setSemester(null);
+        setSubjects([]);
+        setError(true);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [semesterId]);
+
+  if (loading) {
     return (
-      <section className={styles.emptyState}>
-        <div className={styles.emptyIcon}>
-          <BookOpen size={28} />
+      <main className={styles.page}>
+        <div className={styles.container}>
+          <div className={styles.loadingState}>
+            <div className={styles.loadingBar} />
+            <div className={styles.loadingBarShort} />
+            <div className={styles.loadingRows}>
+              {[1, 2, 3, 4].map((item) => (
+                <div className={styles.loadingRow} key={item} />
+              ))}
+            </div>
+          </div>
         </div>
+      </main>
+    );
+  }
 
-        <h2>Semester not found</h2>
-
-        <p>
-          We couldn't find the semester you're looking for.
-        </p>
-
-        <button
-          type="button"
-          className={styles.backButton}
-          onClick={() => navigate(-1)}
-         
-        >
-          <ArrowLeft size={17} />
-          Go Back
-        </button>
-      </section>
+  if (error || !semester) {
+    return (
+      <main className={styles.page}>
+        <section className={styles.emptyState}>
+          <div className={styles.emptyIcon}>
+            <BookOpen size={28} />
+          </div>
+          <h2>Semester not found</h2>
+          <p>We couldn't find the semester you're looking for.</p>
+          <button type="button" className={styles.backButton} onClick={() => navigate(-1)}>
+            <ArrowLeft size={17} />
+            Go Back
+          </button>
+        </section>
+      </main>
     );
   }
 
   return (
     <main className={styles.page}>
       <div className={styles.container}>
-
-        {/* Back */}
-        <button
-          type="button"
-          className={styles.backLink}
-          onClick={() => navigate(-1)}
-       
-        >
+        <button type="button" className={styles.backLink} onClick={() => navigate(-1)}>
           <ArrowLeft size={17} />
           Back to branch
         </button>
 
-        {/* Header */}
         <section className={styles.hero}>
           <div className={styles.heroIcon}>
-            <BookOpen size={34} />
+            <BookOpen size={30} />
           </div>
 
           <div className={styles.heroContent}>
-            <span className={styles.eyebrow}>
-              ACADEMIC SEMESTER
-            </span>
-
-            <h1>
-              {semester.name ||
-                `Semester ${semester.number}`}
-            </h1>
-
-            <p>
-              Explore subjects, study materials and
-              academic resources for this semester.
-            </p>
+            <span className={styles.eyebrow}>SEMESTER {semester.number ?? ""}</span>
+            <h1>{semester.name || `Semester ${semester.number}`}</h1>
+            <p>Choose a subject to access its study materials and resources.</p>
 
             <div className={styles.meta}>
               {semester.branch?.name && (
@@ -101,7 +101,6 @@ function SemesterDetails() {
                   {semester.branch.name}
                 </span>
               )}
-
               {semester.branch?.degree?.name && (
                 <span>
                   <Layers3 size={15} />
@@ -112,83 +111,76 @@ function SemesterDetails() {
           </div>
         </section>
 
-        {/* Statistics */}
-        <section className={styles.stats}>
+        <section className={styles.stats} aria-label="Semester statistics">
           <div className={styles.statCard}>
-            <div className={styles.statIcon}>
-              <BookOpen size={20} />
-            </div>
-
+            <div className={styles.statIcon}><BookOpen size={19} /></div>
             <div>
               <span>Subjects</span>
-              <strong>
-                {semester.subject_count ?? 0}
-              </strong>
+              <strong>{semester.subject_count ?? subjects.length}</strong>
             </div>
           </div>
 
           <div className={styles.statCard}>
-            <div className={styles.statIcon}>
-              <Library size={20} />
-            </div>
-
+            <div className={styles.statIcon}><Library size={19} /></div>
             <div>
               <span>Resources</span>
-              <strong>
-                {semester.resource_count ?? 0}
-              </strong>
+              <strong>{semester.resource_count ?? 0}</strong>
             </div>
           </div>
 
           <div className={styles.statCard}>
-            <div className={styles.statIcon}>
-              <Layers3 size={20} />
-            </div>
-
+            <div className={styles.statIcon}><Layers3 size={19} /></div>
             <div>
               <span>Semester</span>
-              <strong>
-                {semester.number ?? "—"}
-              </strong>
+              <strong>{semester.number ?? "—"}</strong>
             </div>
           </div>
         </section>
 
-        {/* Subjects */}
         <section className={styles.subjectSection}>
           <div className={styles.sectionHeader}>
             <div>
-              <span className={styles.sectionLabel}>
-                CURRICULUM
-              </span>
-
+              <span className={styles.sectionLabel}>CURRICULUM</span>
               <h2>Subjects</h2>
-
-              <p>
-                Select a subject to explore its study
-                materials and resources.
-              </p>
+              <p>{subjects.length} subject{subjects.length === 1 ? "" : "s"} available in this semester.</p>
             </div>
           </div>
 
           {subjects.length > 0 ? (
-            <div className={styles.subjectGrid}>
-              {subjects.map((subject, index) => (
-                <SubjectCard key={index} subject={subject}/>
-              ))}
+            <div className={styles.subjectList}>
+              {subjects.map((subject, index) => {
+                const resourceCount = subject.resource_count ?? subject.resources_count ?? 0;
+
+                return (
+                  <button
+                    type="button"
+                    className={styles.subjectRow}
+                    key={subject.id ?? subject.code ?? index}
+                    onClick={() => navigate(`/resources/${subject.id}`)}
+                  >
+                    <span className={styles.subjectNumber}>
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+
+                    <span className={styles.subjectContent}>
+                      <span className={styles.subjectCode}>{subject.code || "SUBJECT"}</span>
+                      <span className={styles.subjectName}>{subject.name}</span>
+                    </span>
+
+                    <span className={styles.subjectMeta}>
+                      {resourceCount} resource{resourceCount === 1 ? "" : "s"}
+                    </span>
+
+                    <ArrowRight className={styles.arrow} size={18} />
+                  </button>
+                );
+              })}
             </div>
           ) : (
             <div className={styles.noSubjects}>
-              <div className={styles.noSubjectsIcon}>
-                <BookOpen size={24} />
-              </div>
-
+              <div className={styles.noSubjectsIcon}><BookOpen size={23} /></div>
               <h3>No subjects available</h3>
-
-              <p>
-                Subjects for this semester haven't been
-                added yet.
-              </p>
+              <p>Subjects for this semester haven't been added yet.</p>
             </div>
           )}
         </section>
